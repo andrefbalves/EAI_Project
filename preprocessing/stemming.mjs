@@ -13,5 +13,3 @@ export function stemm(cleanedText) {
 
     return words;
 }
-
-//console.log(stemm(6,'a really Interesting string with some words'));

@@ -6,20 +6,18 @@ import {cleanStopwords} from "./stopwords.mjs";
 /**
  * @param {string} docId
  * @param {string} docText
- * @param {number} n 1-unigram or 2-bigram
- * @returns {{}}
+ * @returns {id: string, originalText: string, cleanedText: string, stemmedText: string, unigrams: Array<string>, bigrams: Array<string>}
  */
-export function preprocessing(docId, docText, n) {
+export function preprocessing(docId, docText) {
 
-    let result = {};
+    let doc = {};
 
-    result.id  = docId;
-    result.originalText = docText;
-    result.cleanedText = cleanText(cleanStopwords(docText).join(' '));
-    result.stemmedText = stemm(result.cleanedText).join(' ');//todo testar se este join é necessário dado que depois faço split lá dentro
-    result.unigrams = ngram(n, result.stemmedText.split(' '));
+    doc.id  = docId;
+    doc.originalText = docText;
+    doc.cleanedText = cleanText(cleanStopwords(docText).join(' '));
+    doc.stemmedText = stemm(doc.cleanedText).join(' ');
+    doc.unigrams = ngram(1, doc.stemmedText.split(' '));
+    doc.bigrams = ngram(2, doc.stemmedText.split(' '));
 
-    return result;
+    return doc;
 }
-
-//console.log(preprocessing('a really Interesting string with some words', 2));

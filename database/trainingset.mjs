@@ -1,7 +1,6 @@
 import {db} from "./config.mjs";
 
 /**
- *
  * @param {string} genre
  * @returns {Array.<{id: string, title: string, overview: string, genre: string, poster_path: string, release_date: date, runtime: number, status: string}>}
  */
@@ -15,7 +14,6 @@ export async function getTrainingSet(genre) {
 }
 
 /**
- *
  * @returns {Array<{genre: string}>}
  */
 export async function getTrainingClasses() {

@@ -1,8 +1,13 @@
 import {db} from "./config.mjs";
 
-export async function getDocuments(label, limit) {
-    let query = "SELECT * FROM corpus WHERE label = '" + label + "'";
-    if (limit !== undefined && limit !== '') query += " LIMIT " + limit.toString();
+/**
+ * @param {string} genre
+ * @param {number} limit
+ * @returns {Array.<docs>}
+ */
+export async function getDocuments(genre, limit) {
+    let query = "SELECT * FROM corpus WHERE genre = '" + genre + "'";
+    if (limit !== undefined && limit !== 0) query += " LIMIT " + limit.toString();
     let docs = await db.execute(query);
 
     return docs[0];
