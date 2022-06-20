@@ -29,5 +29,3 @@ function removeSpecificChars(docText) {
 export function cleanText(docText) {
     return removeSpaces(removeSpecificChars(lowerText(docText)));
 }
-
-//console.log(cleanText('a re123all!y Int\'"ere32312sti%#"$&/ng st.rin3213g wi\\th so,;:me wo?rds'));

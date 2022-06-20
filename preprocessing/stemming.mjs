@@ -2,7 +2,7 @@ import {stemmer} from 'stemmer';
 
 /**
  * @param {string} cleanedText
- * @returns {Array.<string>}
+ * @returns {Array<string>}
  */
 export function stemm(cleanedText) {
     let words = cleanedText.split(" ");

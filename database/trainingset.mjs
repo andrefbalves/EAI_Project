@@ -2,7 +2,7 @@ import {db} from "./config.mjs";
 
 /**
  * @param {string} genre
- * @returns {Array.<{id: string, title: string, overview: string, genre: string, poster_path: string, release_date: date, runtime: number, status: string}>}
+ * @returns {Array<{id: string, title: string, overview: string, genre: string, poster_path: string, release_date: date, runtime: number, status: string}>}
  */
 export async function getTrainingSet(genre) {
     let query = "SELECT corpus.* FROM trainingset INNER JOIN corpus ON corpus.imdb_id = trainingset.corpus_id";
