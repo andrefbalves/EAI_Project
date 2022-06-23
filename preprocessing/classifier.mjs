@@ -30,11 +30,9 @@ export async function classVectors() {
     let classes = [];
 
     for (let i = 0; i < trainingClasses.length; i++) {
-        let obj = {class: '', bagOfWords: []};
+        let obj = {genre: trainingClasses[i].genre, bagOfWords: []};
 
-        let trainedTerms = await selectKBest(trainingClasses[i].genre, 0, '', 'average', '');
-        obj.class = trainedTerms[0].class;
-        obj.bagOfWords = organizeClasses(trainedTerms);
+        obj.bagOfWords = await selectKBest(trainingClasses[i].genre, 0, '', 'average', '');
         classes.push(obj);
     }
 
@@ -46,7 +44,7 @@ export async function classVectors() {
  * @param {Array<{tfidf}>} vectorB
  * @returns {number}
  */
-function calculateCosineSimilarity(vectorA, vectorB) {
+function calculateCosineSimilarity(vectorA, vectorB) {//todo vector A e B não estão com a mesma dimensão
     let axb= 0;
     let aSquare = 0;
     let bSquare = 0;
@@ -59,22 +57,28 @@ function calculateCosineSimilarity(vectorA, vectorB) {
     aSquare = Math.sqrt(aSquare);
     bSquare = Math.sqrt(bSquare);
 
-    return axb / (aSquare * bSquare);
+    let result = axb / (aSquare * bSquare);
+
+    return Number.isNaN(result) ? 0 : result;
 }
 
-async function cosineSimilarity(docId, text) {//todo testar
+/**
+ * @param {string} text
+ * @returns {Promise<void>}
+ */
+async function cosineSimilarity(text) {//todo vector A e B não estão com a mesma dimensão
     let classes = await classVectors();
     let doc;
     let arrayOfTerms = [];
     let similarityClasses = [];
     let maxSimilarity = {genre: '', classSimilarity: 0};
 
-    doc = preprocessing(docId, text);
+    doc = preprocessing('', text);
     arrayOfTerms = doc.unigrams.concat(doc.bigrams);
 
     for (let i = 0; i < classes.length; i++) {
         let terms = [];
-        let obj = {genre: classes[i].name, classSimilarity: 0};
+        let obj = {genre: classes[i].genre, classSimilarity: 0};
 
         for (let j = 0; j < classes[i].bagOfWords.length; j++) {
             let term = {};
@@ -85,8 +89,7 @@ async function cosineSimilarity(docId, text) {//todo testar
             terms.push(term);
         }
 
-        let classSimilarity = calculateCosineSimilarity(classes[0].bagOfWords, terms);
-        obj.classSimilarity = Number.isNaN(classSimilarity) ? 0 : classSimilarity;
+        obj.classSimilarity = calculateCosineSimilarity(classes[i].bagOfWords, terms);
         similarityClasses.push(obj);
     }
 
@@ -97,3 +100,4 @@ async function cosineSimilarity(docId, text) {//todo testar
 
     return console.log({label: maxSimilarity.genre, similarity: maxSimilarity.classSimilarity});
 }
+console.log(cosineSimilarity("this is a text woman"));
