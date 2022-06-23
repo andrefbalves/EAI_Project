@@ -68,3 +68,23 @@ export async function cleanTemplate() {
 
     await db.execute(query);
 }
+
+/**
+ * @param {string} genre
+ * @param {number} k
+ * @param {string} metric
+ * @param {string} operation
+ * @param {string} typeOfGram
+ * @returns {Promise<*>}
+ */
+export async function selectKBest(genre, k, metric, operation, typeOfGram) {
+
+    let query = "SELECT * FROM terms WHERE operation = '" + operation + "'";
+    if (genre !== undefined && genre !== '') query += " AND genre = '" + genre + "'";
+    if (typeOfGram !== undefined && typeOfGram !== '') query += " AND typeOfGram = '" + typeOfGram + "'";
+    if (metric !== undefined && metric !== '') query += " ORDER BY " + metric + " DESC";
+    if (k !== undefined && k !== 0) query += " LIMIT " + k;
+    let terms = await db.execute(query);
+
+    return terms[0];
+}

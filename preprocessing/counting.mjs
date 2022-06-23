@@ -24,7 +24,7 @@ export function numberOfOccurrences(term, arrayOfTerms) {
 
 /**
  * @param {string} term
- * @param {Array<string>} arrayOfTerms
+ * @param {Array<string>[]} arrayOfTerms
  * @returns {number}
  */
 export function tf(term, arrayOfTerms) {
