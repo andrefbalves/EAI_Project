@@ -9,4 +9,4 @@ export function ngram(n, text) {
     return nGram(n)(text);
 }
 
-//console.log(ngram(1,'a really Interesting string with some words'.split(" ")));
+console.log(ngram(4,'a really Interesting string with some words'.split(" ")));

@@ -7,7 +7,7 @@ import {db} from "./config.mjs";
 export async function getTrainingSet(genre) {
     let query = "SELECT corpus.* FROM trainingset INNER JOIN corpus ON corpus.imdb_id = trainingset.corpus_id";
     if (genre !== undefined && genre !== '') query += " WHERE genre = '" + genre + "'";
-    query +=  " LIMIT 2";
+    //query +=  " LIMIT 2";
     let set = await db.execute(query);
 
     return set[0];
