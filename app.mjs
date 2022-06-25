@@ -8,7 +8,7 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 
 export var app = express();
-//const __dirname = "C:\\EAI\\";
+const __dirname = "C:\\EAI_Project\\";
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));

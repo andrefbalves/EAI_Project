@@ -32,7 +32,7 @@ export async function classVectors() {
     for (let i = 0; i < trainingClasses.length; i++) {
         let obj = {genre: trainingClasses[i].genre, bagOfWords: []};
 
-        obj.bagOfWords = await selectKBest(trainingClasses[i].genre, 0, '', 'average', '');
+        obj.bagOfWords = organizeClasses(await selectKBest(trainingClasses[i].genre, 0, '', 'average', ''));
         classes.push(obj);
     }
 
@@ -66,7 +66,7 @@ function calculateCosineSimilarity(vectorA, vectorB) {//todo vector A e B não e
  * @param {string} text
  * @returns {Promise<void>}
  */
-async function cosineSimilarity(text) {//todo vector A e B não estão com a mesma dimensão
+async function cosineSimilarity(text) {
     let classes = await classVectors();
     let doc;
     let arrayOfTerms = [];
