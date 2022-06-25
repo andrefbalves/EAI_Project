@@ -6,6 +6,7 @@ import logger from 'morgan';
 
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
+import trainRouter from './routes/trainingset.js';
 
 export var app = express();
 const __dirname = "C:\\EAI_Project\\";
@@ -19,9 +20,11 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+app.use('/public/images/', express.static('./public/images'));
 
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
+app.use('/trainingset', trainRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

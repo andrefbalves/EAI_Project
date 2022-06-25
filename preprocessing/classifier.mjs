@@ -1,5 +1,5 @@
-import {getTrainingClasses} from "../database/trainingset.mjs";
-import {selectKBest} from "../database/terms.mjs";
+import {getTrainingClasses} from "../database/trainingset.js";
+import {selectKBest} from "../database/terms.js";
 import {preprocessing} from "./index.mjs";
 import {tf, tfidf} from "./counting.mjs";
 

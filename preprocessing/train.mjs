@@ -1,7 +1,7 @@
-import {getTrainingClasses, getTrainingSet} from "../database/trainingset.mjs";
+import {getTrainingClasses, getTrainingSet} from "../database/trainingset.js";
 import {preprocessing} from "./index.mjs";
 import {addUniqueTerms, buildVector, operateVector} from "../features/bagOfWords.mjs";
-import {cleanTemplate, cleanTerms, saveTerms} from "../database/terms.mjs";
+import {cleanTemplate, cleanTerms, saveTerms} from "../database/terms.js";
 import fs from "fs";
 
 /**

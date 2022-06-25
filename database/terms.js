@@ -1,9 +1,9 @@
-import {db} from "./config.mjs";
+const db = require("./config");
 
 /**
  * @returns {Promise<void>}
  */
-export async function cleanTerms() {
+async function cleanTerms() {
     let query = "TRUNCATE TABLE terms";
 
     await db.execute(query);
@@ -13,7 +13,7 @@ export async function cleanTerms() {
  * @param {{class, bagOfUnigrams, bagOfBigrams}} trainingClass
  * @returns {Promise<void>}
  */
-export async function saveTerms(trainingClass) {
+async function saveTerms(trainingClass) {
     let query = "INSERT INTO terms (genre, operation, typeOfGram, name, `binary`, occurrences, tf, idf, tfidf) VALUES ";
 
     for (let i = 0; i < trainingClass.bagOfUnigrams.length; i++) {
@@ -63,7 +63,7 @@ export async function saveTerms(trainingClass) {
 /**
  * @returns {Promise<void>}
  */
-export async function cleanTemplate() {
+async function cleanTemplate() {
     let query = "UPDATE terms SET name = replace(name, '`','')";
 
     await db.execute(query);
@@ -77,7 +77,7 @@ export async function cleanTemplate() {
  * @param {string} typeOfGram
  * @returns {Promise<*>}
  */
-export async function selectKBest(genre, k, metric, operation, typeOfGram) {
+async function selectKBest(genre, k, metric, operation, typeOfGram) {
 
     let query = "SELECT * FROM terms WHERE operation = '" + operation + "'";
     if (genre !== undefined && genre !== '') query += " AND genre = '" + genre + "'";
@@ -88,3 +88,5 @@ export async function selectKBest(genre, k, metric, operation, typeOfGram) {
 
     return terms[0];
 }
+
+module.exports = {cleanTerms, saveTerms, cleanTemplate, selectKBest};
