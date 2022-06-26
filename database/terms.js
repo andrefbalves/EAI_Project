@@ -55,7 +55,7 @@ async function saveTerms(trainingClass) {
             + trainingClass.bagOfBigrams[i].average.idf + ", "
             + trainingClass.bagOfBigrams[i].average.tfidf + "),";
     }
-    query = query.replace(/.$/gm, '');
+    query = query.replace(/.$/gm, '');//to delete the last comma
 
     await db.execute(query);
 }

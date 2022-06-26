@@ -44,7 +44,7 @@ export async function classVectors() {
  * @param {Array<{tfidf}>} vectorB
  * @returns {number}
  */
-function calculateCosineSimilarity(vectorA, vectorB) {//todo vector A e B não estão com a mesma dimensão
+function calculateCosineSimilarity(vectorA, vectorB) {
     let axb= 0;
     let aSquare = 0;
     let bSquare = 0;
@@ -54,26 +54,24 @@ function calculateCosineSimilarity(vectorA, vectorB) {//todo vector A e B não e
         aSquare += vectorA[i].tfidf *  vectorA[i].tfidf;
         bSquare += vectorB[i].tfidf *  vectorB[i].tfidf;
     }
-    aSquare = Math.sqrt(aSquare);
-    bSquare = Math.sqrt(bSquare);
 
-    let result = axb / (aSquare * bSquare);
+    let result = axb / (Math.sqrt(aSquare) * Math.sqrt(bSquare));
 
     return Number.isNaN(result) ? 0 : result;
 }
 
 /**
- * @param {string} text
+ * @param {string} overview
  * @returns {Promise<void>}
  */
-async function cosineSimilarity(text) {
+async function cosineSimilarity(overview) {
     let classes = await classVectors();
     let doc;
     let arrayOfTerms = [];
     let similarityClasses = [];
     let maxSimilarity = {genre: '', classSimilarity: 0};
 
-    doc = preprocessing('', text);
+    doc = preprocessing('', overview);
     arrayOfTerms = doc.unigrams.concat(doc.bigrams);
 
     for (let i = 0; i < classes.length; i++) {
@@ -98,6 +96,6 @@ async function cosineSimilarity(text) {
             maxSimilarity = similarityClasses[i];
     }
 
-    return console.log({label: maxSimilarity.genre, similarity: maxSimilarity.classSimilarity});
+    return console.log({genre: maxSimilarity.genre, similarity: maxSimilarity.classSimilarity});
 }
 console.log(cosineSimilarity("this is a text woman"));

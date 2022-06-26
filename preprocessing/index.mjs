@@ -8,7 +8,7 @@ import {cleanStopwords} from "./stopwords.mjs";
  * @param {string} docText
  * @returns {id: string, originalText: string, cleanedText: string, stemmedText: string, unigrams: Array<string>, bigrams: Array<string>}
  */
-export function preprocessing(docId, docText) {
+export function preprocessing(docId, docText) {//todo docId está como undifined
 
     let doc = {};
 
