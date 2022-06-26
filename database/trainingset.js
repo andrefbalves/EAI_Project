@@ -17,8 +17,7 @@ async function getTrainingSet(genre) {
  * @returns {Array<{genre: string}>}
  */
 async function getTrainingClasses() {
-    let query = "SELECT distinct genre FROM corpus INNER JOIN trainingset on corpus.imdb_id = trainingset.corpus_id ORDER BY genre";
-    query +=  " LIMIT 2";
+    let query = "SELECT * FROM classes_config where active = 1";
     let classes = await db.execute(query);
 
     return classes[0];
