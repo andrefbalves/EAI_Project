@@ -42,7 +42,7 @@ export function idf(n, dt) {
 
 /**
  * @param {number} tf
- * @param {number} idf
+ * @param {number} idf\\
  * @returns {number}
  */
 export function tfidf(tf, idf) {
