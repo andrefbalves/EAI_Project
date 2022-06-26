@@ -7,4 +7,11 @@ async function getClassesConfig() {
     return classes[0];
 }
 
-module.exports = {getClassesConfig};
+async function getTrainConfig() {
+    let query = "SELECT * FROM train_config";
+    let configs = await db.execute(query);
+
+    return configs[0];
+}
+
+module.exports = {getClassesConfig, getTrainConfig};
