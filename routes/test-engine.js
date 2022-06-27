@@ -1,15 +1,15 @@
 const express = require('express');
 const router = express.Router();
-const corpus = require('../database/corpus');
 const engine = require('../database/engine');
+const terms = require('../database/terms');
 
 /* GET training set. */
 router.get('/', async function (req, res, next) {
-    let docs = await corpus.getDocuments(req.query.genre, 100);
-    let classes = await engine.getClassesConfig();
     let configs = await engine.getEngineConfig();
+    let bestTerms = await terms.selectKBest('', configs.test_limit_of_records, configs.test_metric, configs.test_operation, configs.test_type_of_gram);
+    let classes = await engine.getClassesConfig();
 
-    res.render('test-engine', { title: 'Test Engine', docs: docs, classes: classes, configs: configs});
+    res.render('test-engine', { title: 'Test Engine', terms: bestTerms, classes: classes, configs: configs});
 });
 
 module.exports = router;
