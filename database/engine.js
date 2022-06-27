@@ -29,4 +29,14 @@ async function saveTrainConfig(limit, field, orderBy) {
     return true;
 }
 
-module.exports = {getClassesConfig, getEngineConfig, saveClassesConfig, saveTrainConfig};
+/**
+ * @returns {Array<{genre: string}>}
+ */
+async function getTrainingClasses() {
+    let query = "SELECT * FROM classes_config where active = 1";
+    let classes = await db.execute(query);
+
+    return classes[0];
+}
+
+module.exports = {getClassesConfig, getEngineConfig, saveClassesConfig, saveTrainConfig, getTrainingClasses};

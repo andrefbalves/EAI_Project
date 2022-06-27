@@ -5,7 +5,7 @@ const db = require("./config");
  * @param {number} limit
  * @returns {Array.<docs>}
  */
-async function getDocuments(genre, limit) {
+async function getDocuments(genre, limit) {//todo checkar se é preciso esta ação
     let query = "SELECT * FROM corpus ";
     if (genre !== undefined && genre !== '') query += "  WHERE genre = '" + genre + "'";
     if (limit !== undefined && limit !== 0) query += " LIMIT " + limit.toString();

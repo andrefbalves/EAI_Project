@@ -104,23 +104,23 @@
         <table class="table table-hover">
             <thead>
             <tr>
-                <th scope="col">Name</th>
-                <th scope="col">Binary</th>
-                <th scope="col">Occurrences</th>
-                <th scope="col">TF</th>
-                <th scope="col">IDF</th>
-                <th scope="col">TF-IDF</th>
+                <th>Name</th>
+                <th class="text-center">Binary</th>
+                <th class="text-center">Occurrences</th>
+                <th class="text-center">TF</th>
+                <th class="text-center">IDF</th>
+                <th class="text-center">TF-IDF</th>
             </tr>
             </thead>
             <tbody>
             <% for(var i = 0; i < terms.length; i++) { %>
                 <tr>
                     <td><%= terms[i].name %></td>
-                    <td><%= terms[i].binary %></td>
-                    <td><%= terms[i].occurrences %></td>
-                    <td><%= terms[i].tf %></td>
-                    <td><%= terms[i].idf %></td>
-                    <td><%= terms[i].tfidf %></td>
+                    <td class="text-center"><%= terms[i].binary %></td>
+                    <td class="text-center"><%= terms[i].occurrences %></td>
+                    <td class="text-center"><%= terms[i].tf %></td>
+                    <td class="text-center"><%= terms[i].idf %></td>
+                    <td class="text-center"><%= terms[i].tfidf %></td>
                 </tr>
             <% } %>
             </tbody>

@@ -14,13 +14,32 @@ async function getTrainingSet(genre) {
 }
 
 /**
- * @returns {Array<{genre: string}>}
+ * @returns {Promise<void>}
  */
-async function getTrainingClasses() {
-    let query = "SELECT * FROM classes_config where active = 1";
-    let classes = await db.execute(query);
+async function cleanTrainingSet() {
+    let query = "TRUNCATE TABLE trainingset";
 
-    return classes[0];
+    await db.execute(query);
 }
 
-module.exports = {getTrainingSet, getTrainingClasses};
+/**
+ * @param classes
+ * @param configs
+ * @returns {Promise<void>}
+ */
+async function setTrainingSet(classes, configs) {
+
+    await cleanTrainingSet();
+
+    for (let i = 0; i < classes.length; i++) {
+        let query = "INSERT INTO trainingset (corpus_id) " +
+                    "SELECT imdb_id FROM corpus " +
+                    "WHERE genre = '" + classes[i].genre + "' " +
+                    "ORDER BY " + configs.train_order_by_field + " " + configs.train_order_by +
+                    " LIMIT " + configs.train_limit_of_records;
+
+        await db.execute(query);
+    }
+}
+
+module.exports = {getTrainingSet, setTrainingSet};
