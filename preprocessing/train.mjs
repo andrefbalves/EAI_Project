@@ -1,8 +1,10 @@
-import {getTrainingClasses, getTrainingSet} from "../database/trainingset.js";
+import {getTrainingSet} from "../database/trainingset.js";
 import {preprocessing} from "./index.mjs";
 import {addUniqueTerms, buildVector, operateVector} from "../features/bagOfWords.mjs";
 import {cleanTemplate, cleanTerms, saveTerms} from "../database/terms.js";
+import engine, {getActiveClasses, getEngineConfig} from "../database/engine.js";
 import fs from "fs";
+
 
 /**
  * @param {Array<{unigrams: [], bigrams: []}>} docs
@@ -93,11 +95,12 @@ function saveFile(trainingSet) {
  * @returns {Promise<void>}
  */
 async function process() {
-    let classes = await getTrainingClasses();
+    let configs = await getEngineConfig();
+    let classes = await getActiveClasses();
     let train = [];
 
     for (let i = 0; i < classes.length; i++) {
-        let set = await getTrainingSet(classes[i].genre);
+        let set = await getTrainingSet(classes[i].genre, configs);
         let docSet = {class: classes[i].genre, docs: []};
         let bagOfUnigrams = [];
         let bagOfBigrams = [];

@@ -106,9 +106,11 @@
                         </div>
                         <div class="col">
                             <button class="btn btn-primary" type="submit" name="formBtn" value="save">Save Settings</button>
-                            <button class="btn btn-warning btn-outline-danger ms-3" type="submit" name="formBtn" value="train"><i
-                                        class="bi bi-arrow-repeat"></i> Train
-                                Engine
+                            <button class="btn btn-warning btn-outline-danger ms-3" type="submit" name="formBtn" value="train">
+                                <div class="spinner-border spinner-border-sm text-primary d-none" role="status" id='spinner'>
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                                Train Engine
                             </button>
                         </div>
                     </div>
