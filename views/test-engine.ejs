@@ -30,12 +30,12 @@
                     to your liking.</p>
             </div>
             <div class="container border-top">
-                <form>
+                <form method="post">
                     <div class="row mt-2">
                             <div class="col">
                                 <div class="input-group mb-3">
                                     <label class="input-group-text" for="inputGroupSelect01">Test Class</label>
-                                    <select class="form-select" id="inputGroupSelect01" required>
+                                    <select class="form-select" id="inputGroupSelect01" name="genre" required>
                                         <% for(var c = 0; c < classes.length; c++) { %>
                                             <option value="" disabled selected hidden>Choose Test Class...</option>
                                             <option value="<%= classes[c].genre%>"><%= classes[c].genre%></option>
@@ -47,13 +47,13 @@
                             <div class="input-group mb-3">
                                 <span class="input-group-text" id="basic-addon3">Number of Records</span>
                                 <input type="number" class="form-control" id="basic-url" min="0" step="1"
-                                       aria-describedby="basic-addon3" value="<%= configs.test_limit_of_records %>"required>
+                                       aria-describedby="basic-addon3" value="<%= configs.test_limit_of_records %>" name="limitRecords" required>
                             </div>
                         </div>
                         <div class="col">
                             <div class="input-group mb-3">
                                 <label class="input-group-text" for="inputGroupSelect01">Metric</label>
-                                <select class="form-select" id="inputGroupSelect01" required>
+                                <select class="form-select" id="inputGroupSelect01" name="metric" required>
                                     <option value="" disabled selected hidden>Choose Metric...</option>
                                     <option value="binary" <% if(configs.test_order_by_field === 'binary') { %>
                                             <% } %>>Binary</option>
@@ -72,7 +72,7 @@
                         <div class="col">
                             <div class="input-group mb-3">
                                 <label class="input-group-text" for="inputGroupSelect01">Operation</label>
-                                <select class="form-select" id="inputGroupSelect01" required>
+                                <select class="form-select" id="inputGroupSelect01" name="operation" required>
                                     <option value="" disabled selected hidden>Choose Operation...</option>
                                     <option value="sum" <% if(configs.test_operation === 'sum') { %>
                                             <% } %>>Sum</option>>ASC</option>
@@ -83,8 +83,8 @@
                         </div>
                             <div class="col">
                                 <div class="input-group mb-3">
-                                    <label class="input-group-text" for="inputGroupSelect01">Operation</label>
-                                    <select class="form-select" id="inputGroupSelect01" required>
+                                    <label class="input-group-text" for="inputGroupSelect01">Type Of Gram</label>
+                                    <select class="form-select" id="inputGroupSelect01" name="typeOfGram" required>
                                         <option value="" disabled selected hidden>Choose Type of Gram...</option>
                                         <option value="sum" <% if(configs.test_type_of_gram === 'unigram') { %>
                                                 <% } %>>Unigram</option>>ASC</option>
@@ -94,7 +94,7 @@
                                 </div>
                             </div>
                             <div class="col">
-                                <button class="btn btn-primary" type="button">Submit</button>
+                                <button class="btn btn-primary" type="submit" name="testBtn" value="save">Save Settings</button>
                             </div>
                         </div>
                     </div>

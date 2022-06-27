@@ -33,6 +33,19 @@ async function saveClassesConfig(activesClasses) {
     return true;
 }
 
+async function saveTestConfig(limitRecords, metric, operation, typeOfGram) {
+    let query = "UPDATE engine_config SET test_limit_of_records = " + limitRecords + ", test_order_by_metric = '" + metric + "', test_operation = '" + operation + "', test_type_of_gram = '" + typeOfGram + "'";
+    await db.execute(query);
+    return true;
+}
+/**
+ * @param {number} limitRecords
+ * @param {string} metric
+ * @param {string} operation
+ * @returns {Promise<boolean>}
+ */
+
+
 /**
  * @param {number} limit
  * @param {string} field
@@ -55,4 +68,4 @@ async function getActiveClasses() {
     return classes[0];
 }
 
-module.exports = {getClassesConfig, getEngineConfig, saveClassesConfig, saveTrainConfig, getActiveClasses};
+module.exports = {getClassesConfig, getEngineConfig, saveClassesConfig, saveTrainConfig, getActiveClasses, saveTestConfig};
