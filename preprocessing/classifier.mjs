@@ -1,7 +1,8 @@
-import {getTrainingClasses} from "../database/trainingset.mjs";
 import {selectKBest} from "../database/terms.mjs";
 import {preprocessing} from "./index.mjs";
 import {tf, tfidf} from "./counting.mjs";
+import {getEngineConfig, getActiveClasses} from "../database/engine.mjs";
+import {getTrainingSet} from "../database/trainingset.mjs";
 
 /**
  * @param {Array<{name, tfidf, idf}>} arrayOfTerms
@@ -25,14 +26,14 @@ function organizeClasses(arrayOfTerms) {
 /**
  * @returns {Promise<*[]>}
  */
-export async function classVectors() {
-    let trainingClasses = await getTrainingClasses();
+async function classVectors() {
+    let activeClasses = await getActiveClasses();
     let classes = [];
 
-    for (let i = 0; i < trainingClasses.length; i++) {
-        let obj = {genre: trainingClasses[i].genre, bagOfWords: []};
+    for (let i = 0; i < activeClasses.length; i++) {
+        let obj = {genre: activeClasses[i].genre, bagOfWords: []};
 
-        obj.bagOfWords = organizeClasses(await selectKBest(trainingClasses[i].genre, 0, '', 'average', ''));
+        obj.bagOfWords = organizeClasses(await selectKBest(activeClasses[i].genre, await getEngineConfig()));
         classes.push(obj);
     }
 
@@ -62,7 +63,7 @@ function calculateCosineSimilarity(vectorA, vectorB) {
 
 /**
  * @param {string} overview
- * @returns {Promise<void>}
+ * @returns {Promise<{genre: string, classSimilarity: number}>}
  */
 async function cosineSimilarity(overview) {
     let classes = await classVectors();
@@ -96,6 +97,25 @@ async function cosineSimilarity(overview) {
             maxSimilarity = similarityClasses[i];
     }
 
-    return console.log({genre: maxSimilarity.genre, similarity: maxSimilarity.classSimilarity});
+    return maxSimilarity;
 }
-console.log(cosineSimilarity("this is a text woman"));
+
+/**
+ * @param {string} genre
+ * @param {{train_order_by_field: string, train_order_by: string}} configs
+ * @returns {Promise<number>}
+ */
+async function calculateProbability(genre, configs) {
+    let genreRecords = await getTrainingSet(genre, configs);
+    let allRecords = await getTrainingSet('', configs);
+
+    return genreRecords.length / allRecords.length;
+}
+
+/**
+ * @param {string} overview
+ */
+function classify(overview) {
+    //todo LAB 7
+}
+//console.log(cosineSimilarity("this is a text woman"));
