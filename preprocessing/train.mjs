@@ -85,7 +85,7 @@ function saveFile(trainingSet) {
     let json = JSON.stringify(obj);
 
     try {
-        fs.writeFileSync('../trainingSet.json', json);
+        fs.writeFileSync('./trainingSet.json', json);
     } catch (err) {
         console.error(err)
     }
@@ -124,4 +124,4 @@ export async function process() {
     await save(train);
     console.log('Completed');
 }
-console.log(process());
+//console.log(process());
