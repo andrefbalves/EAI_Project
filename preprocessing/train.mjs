@@ -1,8 +1,8 @@
-import {getTrainingSet} from "../database/trainingset.js";
+import {getTrainingSet} from "../database/trainingset.mjs";
 import {preprocessing} from "./index.mjs";
 import {addUniqueTerms, buildVector, operateVector} from "../features/bagOfWords.mjs";
-import {cleanTemplate, cleanTerms, saveTerms} from "../database/terms.js";
-import {getActiveClasses, getEngineConfig} from "../database/engine.js";
+import {cleanTemplate, cleanTerms, saveTerms} from "../database/terms.mjs";
+import {getActiveClasses, getEngineConfig} from "../database/engine.mjs";
 import fs from "fs";
 
 
@@ -94,7 +94,7 @@ function saveFile(trainingSet) {
 /**
  * @returns {Promise<void>}
  */
-async function process() {
+export async function process() {
     let configs = await getEngineConfig();
     let classes = await getActiveClasses();
     let train = [];

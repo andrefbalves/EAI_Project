@@ -4,10 +4,10 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
-import indexRouter from './routes/index.js';
-import usersRouter from './routes/users.js';
-import trainRouter from './routes/training-engine.js';
-import testRouter from './routes/test-engine.js';
+import {indexRouter} from './routes/index.mjs';
+import {usersRouter} from './routes/users.mjs';
+import {trainRouter} from './routes/training-engine.mjs';
+import {testRouter} from './routes/test-engine.mjs';
 
 export var app = express();
 const __dirname = "C:\\EAI_Project\\";

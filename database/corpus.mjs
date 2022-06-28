@@ -1,11 +1,11 @@
-const db = require("./config");
+import {db} from "./config.mjs";
 
 /**
  * @param {string} genre
  * @param {number} limit
  * @returns {Array.<docs>}
  */
-async function getDocuments(genre, limit) {//todo checkar se é preciso esta ação
+export async function getDocuments(genre, limit) {//todo checkar se é preciso esta ação
     let query = "SELECT * FROM corpus ";
     if (genre !== undefined && genre !== '') query += "  WHERE genre = '" + genre + "'";
     if (limit !== undefined && limit !== 0) query += " LIMIT " + limit.toString();
@@ -13,5 +13,3 @@ async function getDocuments(genre, limit) {//todo checkar se é preciso esta aç
 
     return docs[0];
 }
-
-module.exports = {getDocuments};

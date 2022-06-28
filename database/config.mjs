@@ -1,10 +1,8 @@
-const mysql = require('mysql2/promise');
+import * as mysql from "mysql2/promise";
 
-const db = mysql.createPool({
+export const db = mysql.createPool({
     host: "localhost",
     user: "root",
     password: "password",
     database: "eai_project"
 });
-
-module.exports = db;
