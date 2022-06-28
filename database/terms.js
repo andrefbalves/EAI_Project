@@ -71,19 +71,16 @@ async function cleanTemplate() {
 
 /**
  * @param {string} genre
- * @param {number} k
- * @param {string} metric
- * @param {string} operation
- * @param {string} typeOfGram
+ * @param {{test_operation, test_type_of_gram, test_order_by_metric, test_limit_of_records}} configs
  * @returns {Promise<*>}
  */
-async function selectKBest(genre, k, metric, operation, typeOfGram) {
+async function selectKBest(genre, configs) {
 
-    let query = "SELECT * FROM terms WHERE operation = '" + operation + "'";
-    if (genre !== undefined && genre !== '') query += " AND genre = '" + genre + "'";
-    if (typeOfGram !== undefined && typeOfGram !== '') query += " AND typeOfGram = '" + typeOfGram + "'";
-    if (metric !== undefined && metric !== '') query += " ORDER BY " + metric + " DESC";
-    if (k !== undefined && k !== 0) query += " LIMIT " + k;
+    let query = "SELECT * FROM terms WHERE operation = '" + configs.test_operation + "'";
+    if (genre !== undefined && genre !== 'All' && genre !== '') query += " AND genre = '" + genre + "'";
+    if (configs.test_type_of_gram !== undefined && configs.test_type_of_gram !== '') query += " AND typeOfGram = '" + configs.test_type_of_gram + "'";
+    if (configs.test_order_by_metric !== undefined && configs.test_order_by_metric !== '') query += " ORDER BY " + configs.test_order_by_metric + " DESC";
+    if (configs.test_limit_of_records !== undefined && configs.test_limit_of_records !== 0) query += " LIMIT " + configs.test_limit_of_records;
     let terms = await db.execute(query);
 
     return terms[0];

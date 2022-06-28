@@ -38,13 +38,6 @@ async function saveTestConfig(limitRecords, metric, operation, typeOfGram) {
     await db.execute(query);
     return true;
 }
-/**
- * @param {number} limitRecords
- * @param {string} metric
- * @param {string} operation
- * @returns {Promise<boolean>}
- */
-
 
 /**
  * @param {number} limit

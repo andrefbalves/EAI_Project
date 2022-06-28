@@ -36,9 +36,11 @@
                                 <div class="input-group mb-3">
                                     <label class="input-group-text" for="inputGroupSelect01">Test Class</label>
                                     <select class="form-select" id="inputGroupSelect01" name="genre" required>
+                                        <option value="All" <% if(genre === 'All') { %> selected
+                                                <% } %>>All Classes</option>
                                         <% for(var c = 0; c < classes.length; c++) { %>
-                                            <option value="" disabled selected hidden>Choose Test Class...</option>
-                                            <option value="<%= classes[c].genre%>"><%= classes[c].genre%></option>
+                                            <option value="<%= classes[c].genre%>" <% if(genre === classes[c].genre) { %> selected
+                                                    <% } %>><%= classes[c].genre%></option>
                                         <% } %>
                                     </select>
                             </div>
@@ -55,15 +57,15 @@
                                 <label class="input-group-text" for="inputGroupSelect01">Metric</label>
                                 <select class="form-select" id="inputGroupSelect01" name="metric" required>
                                     <option value="" disabled selected hidden>Choose Metric...</option>
-                                    <option value="binary" <% if(configs.test_order_by_field === 'binary') { %>
+                                    <option value="binary" <% if(configs.test_order_by_metric === 'binary') { %> selected
                                             <% } %>>Binary</option>
-                                    <option value="occurrences"<% if(configs.test_order_by_field === 'occurrences') { %>
+                                    <option value="occurrences"<% if(configs.test_order_by_metric === 'occurrences') { %> selected
                                             <% } %>>Occurrences</option>
-                                    <option value="tf" <% if(configs.test_order_by_field === 'tf') { %>
+                                    <option value="tf" <% if(configs.test_order_by_metric === 'tf') { %> selected
                                             <% } %>>TF</option>
-                                    <option value="idf" <% if(configs.test_order_by_field === 'idf') { %>
+                                    <option value="idf" <% if(configs.test_order_by_metric === 'idf') { %> selected
                                             <% } %>>IDF</option>
-                                    <option value="tfidf"<% if(configs.test_order_by_field === 'tfidf') { %>
+                                    <option value="tfidf"<% if(configs.test_order_by_metric === 'tfidf') { %> selected
                                             <% } %>>TF-IDF</option>
                                 </select>
                             </div>
@@ -74,9 +76,9 @@
                                 <label class="input-group-text" for="inputGroupSelect01">Operation</label>
                                 <select class="form-select" id="inputGroupSelect01" name="operation" required>
                                     <option value="" disabled selected hidden>Choose Operation...</option>
-                                    <option value="sum" <% if(configs.test_operation === 'sum') { %>
+                                    <option value="sum" <% if(configs.test_operation === 'sum') { %> selected
                                             <% } %>>Sum</option>>ASC</option>
-                                    <option value="average" <% if(configs.test_operation === 'average') { %>
+                                    <option value="average" <% if(configs.test_operation === 'average') { %> selected
                                             <% } %>>Average</option>>DESC</option>
                                 </select>
                             </div>
@@ -86,9 +88,9 @@
                                     <label class="input-group-text" for="inputGroupSelect01">Type Of Gram</label>
                                     <select class="form-select" id="inputGroupSelect01" name="typeOfGram" required>
                                         <option value="" disabled selected hidden>Choose Type of Gram...</option>
-                                        <option value="sum" <% if(configs.test_type_of_gram === 'unigram') { %>
+                                        <option value="unigram" <% if(configs.test_type_of_gram === 'unigram') { %> selected
                                                 <% } %>>Unigram</option>>ASC</option>
-                                        <option value="average" <% if(configs.test_type_of_gram === 'bigram') { %>
+                                        <option value="bigram" <% if(configs.test_type_of_gram === 'bigram') { %> selected
                                                 <% } %>>Bigram</option>>DESC</option>
                                     </select>
                                 </div>

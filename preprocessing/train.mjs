@@ -2,7 +2,7 @@ import {getTrainingSet} from "../database/trainingset.js";
 import {preprocessing} from "./index.mjs";
 import {addUniqueTerms, buildVector, operateVector} from "../features/bagOfWords.mjs";
 import {cleanTemplate, cleanTerms, saveTerms} from "../database/terms.js";
-import engine, {getActiveClasses, getEngineConfig} from "../database/engine.js";
+import {getActiveClasses, getEngineConfig} from "../database/engine.js";
 import fs from "fs";
 
 
@@ -124,5 +124,4 @@ async function process() {
     await save(train);
     console.log('Completed');
 }
-
 console.log(process());

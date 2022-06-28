@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-const corpus = require('../database/corpus');
 const engine = require('../database/engine');
 const trainingSet = require('../database/trainingset');
 
@@ -19,9 +18,7 @@ router.post('/', async function (req, res, next) {
         await engine.saveTrainConfig(req.body.limit, req.body.field, req.body.order);
     }
     else if(req.body.formBtn === 'train') {
-        $("#spinner").removeClass("d-none");
-        console.log();
-        $("#spinner").addClass("d-none");
+        console.log('call train.mjs');//todo verificar como chamar a ação do modulo train.mjs
     }
 
     let classes = await engine.getClassesConfig();
