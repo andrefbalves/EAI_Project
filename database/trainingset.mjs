@@ -24,20 +24,22 @@ async function cleanTrainingSet() {
 }
 
 /**
- * @param {Array<{genre}>} classes
- * @param {{train_order_by_field, train_order_by, train_limit_of_records}} configs
+ * @param {Array<{string}>} classes
+ * @param {number} limit_of_records
+ * @param {string} order_by_field
+ * @param {string} order_by
  * @returns {Promise<void>}
  */
-export async function setTrainingSet(classes, configs) {
+export async function setTrainingSet(classes, limit_of_records, order_by_field, order_by) {
 
     await cleanTrainingSet();
 
     for (let i = 0; i < classes.length; i++) {
         let query = "INSERT INTO trainingset (corpus_id) " +
                     "SELECT imdb_id FROM corpus " +
-                    "WHERE genre = '" + classes[i].genre + "' " +
-                    "ORDER BY " + configs.train_order_by_field + " " + configs.train_order_by +
-                    " LIMIT " + configs.train_limit_of_records;
+                    "WHERE genre = '" + classes[i] + "' " +
+                    "ORDER BY " + order_by_field + " " + order_by +
+                    " LIMIT " + limit_of_records;
 
         await db.execute(query);
     }

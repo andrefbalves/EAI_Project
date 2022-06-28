@@ -32,73 +32,113 @@
             <div class="container border-top">
                 <form method="post">
                     <div class="row mt-2">
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <label class="input-group-text" for="inputGroupSelect01">Test Class</label>
-                                    <select class="form-select" id="inputGroupSelect01" name="genre" required>
-                                        <option value="All" <% if(genre === 'All') { %> selected
-                                                <% } %>>All Classes</option>
-                                        <% for(var c = 0; c < classes.length; c++) { %>
-                                            <option value="<%= classes[c].genre%>" <% if(genre === classes[c].genre) { %> selected
-                                                    <% } %>><%= classes[c].genre%></option>
-                                        <% } %>
-                                    </select>
-                            </div>
-                    </div>
                         <div class="col">
-                            <div class="input-group mb-3">
-                                <span class="input-group-text" id="basic-addon3">Number of Records</span>
-                                <input type="number" class="form-control" id="basic-url" min="0" step="1"
-                                       aria-describedby="basic-addon3" value="<%= configs.test_limit_of_records %>" name="limitRecords" required>
+                            <div class="input-group">
+                                <label class="input-group-text" for="inputGroupSelect01">Test Class</label>
+                                <select class="form-select" id="inputGroupSelect01" name="genre" required>
+                                    <option value="All"
+                                    <% if(genre === 'All') { %> selected
+                                            <% } %>
+                                    >All Classes
+                                    </option>
+                                    <% for(var c = 0; c < classes.length; c++) { %>
+                                        <option value="<%= classes[c].genre %>"
+                                        <% if(genre === classes[c].genre) { %> selected
+                                                <% } %>
+                                        ><%= classes[c].genre %></option>
+                                    <% } %>
+                                </select>
                             </div>
                         </div>
                         <div class="col">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon3">Number of Records</span>
+                                <input type="number" class="form-control" id="basic-url" min="0" step="1"
+                                       aria-describedby="basic-addon3" value="<%= configs.test_limit_of_records %>"
+                                       name="limitRecords" required>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">Metric</label>
                                 <select class="form-select" id="inputGroupSelect01" name="metric" required>
                                     <option value="" disabled selected hidden>Choose Metric...</option>
-                                    <option value="binary" <% if(configs.test_order_by_metric === 'binary') { %> selected
-                                            <% } %>>Binary</option>
-                                    <option value="occurrences"<% if(configs.test_order_by_metric === 'occurrences') { %> selected
-                                            <% } %>>Occurrences</option>
-                                    <option value="tf" <% if(configs.test_order_by_metric === 'tf') { %> selected
-                                            <% } %>>TF</option>
-                                    <option value="idf" <% if(configs.test_order_by_metric === 'idf') { %> selected
-                                            <% } %>>IDF</option>
-                                    <option value="tfidf"<% if(configs.test_order_by_metric === 'tfidf') { %> selected
-                                            <% } %>>TF-IDF</option>
+                                    <option value="binary"
+                                    <% if(configs.test_order_by_metric === 'binary') { %> selected
+                                            <% } %>
+                                    >Binary
+                                    </option>
+                                    <option value="occurrences"
+                                    <% if(configs.test_order_by_metric === 'occurrences') { %> selected
+                                            <% } %>
+                                    >Occurrences
+                                    </option>
+                                    <option value="tf"
+                                    <% if(configs.test_order_by_metric === 'tf') { %> selected
+                                            <% } %>
+                                    >TF
+                                    </option>
+                                    <option value="idf"
+                                    <% if(configs.test_order_by_metric === 'idf') { %> selected
+                                            <% } %>
+                                    >IDF
+                                    </option>
+                                    <option value="tfidf"
+                                    <% if(configs.test_order_by_metric === 'tfidf') { %> selected
+                                            <% } %>
+                                    >TF-IDF
+                                    </option>
                                 </select>
                             </div>
                         </div>
-                        <div class="row mt-2">
+                    </div>
+                    <div class="row mt-3">
                         <div class="col">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">Operation</label>
                                 <select class="form-select" id="inputGroupSelect01" name="operation" required>
                                     <option value="" disabled selected hidden>Choose Operation...</option>
-                                    <option value="sum" <% if(configs.test_operation === 'sum') { %> selected
-                                            <% } %>>Sum</option>>ASC</option>
-                                    <option value="average" <% if(configs.test_operation === 'average') { %> selected
-                                            <% } %>>Average</option>>DESC</option>
+                                    <option value="sum"
+                                    <% if(configs.test_operation === 'sum') { %> selected
+                                            <% } %>
+                                    >Sum
+                                    </option>
+                                    >ASC</option>
+                                    <option value="average"
+                                    <% if(configs.test_operation === 'average') { %> selected
+                                            <% } %>
+                                    >Average
+                                    </option>
+                                    >DESC</option>
                                 </select>
                             </div>
                         </div>
-                            <div class="col">
-                                <div class="input-group mb-3">
-                                    <label class="input-group-text" for="inputGroupSelect01">Type Of Gram</label>
-                                    <select class="form-select" id="inputGroupSelect01" name="typeOfGram" required>
-                                        <option value="" disabled selected hidden>Choose Type of Gram...</option>
-                                        <option value="unigram" <% if(configs.test_type_of_gram === 'unigram') { %> selected
-                                                <% } %>>Unigram</option>>ASC</option>
-                                        <option value="bigram" <% if(configs.test_type_of_gram === 'bigram') { %> selected
-                                                <% } %>>Bigram</option>>DESC</option>
-                                    </select>
-                                </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label class="input-group-text" for="inputGroupSelect01">Type Of Gram</label>
+                                <select class="form-select" id="inputGroupSelect01" name="typeOfGram" required>
+                                    <option value="" disabled selected hidden>Choose Type of Gram...</option>
+                                    <option value="unigram"
+                                    <% if(configs.test_type_of_gram === 'unigram') { %> selected
+                                            <% } %>
+                                    >Unigram
+                                    </option>
+                                    >ASC</option>
+                                    <option value="bigram"
+                                    <% if(configs.test_type_of_gram === 'bigram') { %> selected
+                                            <% } %>
+                                    >Bigram
+                                    </option>
+                                    >DESC</option>
+                                </select>
                             </div>
-                            <div class="col">
-                                <button class="btn btn-primary" type="submit" name="testBtn" value="save">Save Settings</button>
-                                <a href="training-engine" class="btn btn-warning">Back to Training</a>
-                            </div>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-primary" type="submit" name="testBtn" value="save"><i
+                                        class="bi bi-gear"></i> Save Settings
+                            </button>
+                            <a href="training-engine" class="btn btn-warning position-absolute ms-3"><i class="bi bi-speedometer2"></i>
+                                Let's Try the Classificator</a>
                         </div>
                     </div>
                 </form>

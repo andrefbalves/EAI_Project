@@ -27,7 +27,7 @@ export async function getEngineConfig() {
 export async function saveClassesConfig(activesClasses) {
     let query = "UPDATE classes_config SET active = 0";
     await db.execute(query);
-    let classes = Array.isArray(activesClasses) ? "'" + activesClasses.join([separator = "','"]) + "'" : "'" + activesClasses + "'";
+    let classes = Array.isArray(activesClasses) ? "'" + activesClasses.join(["','"]) + "'" : "'" + activesClasses + "'";
     query = "UPDATE classes_config SET active = 1 WHERE genre in (" + classes + ")";
     await db.execute(query);
     return true;

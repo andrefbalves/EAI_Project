@@ -48,7 +48,7 @@
                     </div>
                     <div class="row mt-3">
                         <div class="col">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <span class="input-group-text">Limit of records by class</span>
                                 <input type="number" class="form-control" name="limit" min="0" step="1"
                                        aria-describedby="basic-addon3" value="<%= configs.train_limit_of_records %>"
@@ -56,7 +56,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <label class="input-group-text">Order by</label>
                                 <select class="form-select" name="field" required>
                                     <option value="imdb_id"
@@ -88,7 +88,7 @@
                             </div>
                         </div>
                         <div class="col">
-                            <div class="input-group mb-3">
+                            <div class="input-group">
                                 <label class="input-group-text">Order by</label>
                                 <select class="form-select" name="order" required>
                                     <option value="ASC"
@@ -104,11 +104,11 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
-                            <button class="btn btn-primary" onclick="saved()" type="submit" name="formBtn" value="save">Save Settings</button>
-                            <button class="btn btn-warning ms-3" onclick="trainingEngine()" type="submit" name="formBtn" value="train">
+                        <div class="col-sm-3">
+                            <button class="btn btn-primary me-3" onclick="saved()" type="submit" name="formBtn" value="save"><i class="bi bi-gear"></i> Save Settings</button>
+                            <button class="btn btn-warning position-absolute" onclick="trainingEngine()" type="submit" name="formBtn" value="train">
                                 <div class="spinner-border spinner-border-sm text-danger d-none" role="status" id='spinner'>
-                                </div>
+                                </div><i class="bi bi-arrow-repeat"id="iconTrain"></i>
                                 Train Engine
                             </button>
                         </div>
@@ -154,8 +154,11 @@
 </main>
 <script>
     function trainingEngine() {
-        const element = document.getElementById("spinner");
-        element.classList.remove("d-none");
+        const icon = document.getElementById("iconTrain");
+        const spinner = document.getElementById("spinner");
+        icon.classList.add("d-none");
+        spinner.classList.remove("d-none");
+
     }
     function  saved() {
         const element = document.getElementById("alertSaved");
