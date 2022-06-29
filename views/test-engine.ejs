@@ -92,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-5">
+                    <div class="row mt-3">
                         <div class="col">
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">Operation</label>
@@ -117,7 +117,11 @@
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">Test Operation Cosine</label>
                                 <select class="form-select" id="inputGroupSelect01" name="testCosine" required>
-                                    <option value="" disabled selected hidden>Operation Cosine...</option>
+                                    <option value="" disabled selected hidden>Operation Cosine</option>
+                                    <option value="sum"
+                                    <% if(configs.test_operation === 'average') { %> selected
+                                            <% } %>
+                                    >Average</option>
                                 </select>
                             </div>
                         </div>
@@ -125,38 +129,44 @@
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">Test Bayes Operation</label>
                                 <select class="form-select" id="inputGroupSelect01" name="testBayes" required>
-                                    <option value="" disabled selected hidden>Operation Bayes...</option>
+                                    <option value="" disabled selected hidden>Operation Bayes</option>
+                                    <option value="sum"
+                                    <% if(configs.test_operation === 'sum') { %> selected
+                                            <% } %>
+                                    >Sum</option>
                                 </select>
                             </div>
                         </div>
                         </div>
-                    <div class="row mt-5">
+                    <div class="row mt-3">
                     <div class="col">
                         <div class="input-group">
                             <label class="input-group-text" for="inputGroupSelect01">Type Of Gram</label>
                             <select class="form-select" id="inputGroupSelect01" name="typeOfGram" required>
-                                <option value="" disabled selected hidden>Choose Type of Gram...</option>
+                                <option value="All"
+                                <% if(configs.test_type_of_gram === 'All') { %> selected
+                                        <% } %>
+                                >All Grams
+                                </option>
                                 <option value="unigram"
                                 <% if(configs.test_type_of_gram === 'unigram') { %> selected
                                         <% } %>
                                 >Unigram
                                 </option>
-                                >ASC</option>
                                 <option value="bigram"
                                 <% if(configs.test_type_of_gram === 'bigram') { %> selected
                                         <% } %>
                                 >Bigram
                                 </option>
-                                >DESC</option>
                             </select>
                         </div>
                     </div>
                         <div class="col">
                             <div class="input-group">
-                                <label class="input-group-text" for="inputGroupSelect01">Test Normalizer</label>
-                                <select class="form-select" id="inputGroupSelect01" name="testNormalizer" required>
-                                    <option value="" disabled selected hidden>Input Normalizer...</option>
-                                </select>
+                                <span class="input-group-text" id="basic-addon3">Test Normalizer</span>
+                                <input type="number" class="form-control" id="basic-url" min="1"
+                                       aria-describedby="basic-addon3" value="<%= configs.test_normalizer%>"
+                                       name="testNormalizer" required>
                             </div>
                         </div>
                         <div class="col">
@@ -184,6 +194,7 @@
             <tbody>
             <% for(var i = 0; i < terms.length; i++) { %>
                 <tr>
+                    <td><%= terms[i].genre %></td>
                     <td><%= terms[i].name %></td>
                     <td class="text-center"><%= terms[i].binary %></td>
                     <td class="text-center"><%= terms[i].occurrences %></td>
