@@ -8,6 +8,7 @@ import {indexRouter} from './routes/index.mjs';
 import {usersRouter} from './routes/users.mjs';
 import {trainRouter} from './routes/training-engine.mjs';
 import {testRouter} from './routes/test-engine.mjs';
+import {classifierRouter} from './routes/classifier-engine.mjs';
 
 export var app = express();
 const __dirname = "C:\\EAI_Project\\";
@@ -27,6 +28,7 @@ app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/training-engine', trainRouter);
 app.use('/test-engine', testRouter);
+app.use('/classifier-engine', classifierRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
