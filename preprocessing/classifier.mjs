@@ -25,16 +25,18 @@ function organizeClasses(arrayOfTerms) {
 }
 
 /**
+ * @param {string} classifier
+ * @param  configs
  * @returns {Promise<*[]>}
  */
-async function classVectors() {
+async function classVectors(classifier, configs) {
     let activeClasses = await getActiveClasses();
     let classes = [];
 
     for (let i = 0; i < activeClasses.length; i++) {
         let obj = {genre: activeClasses[i].genre, bagOfWords: []};
 
-        obj.bagOfWords = organizeClasses(await selectKBest(activeClasses[i].genre, await getEngineConfig()));
+        obj.bagOfWords = organizeClasses(await selectKBest(activeClasses[i].genre, classifier, configs));
         classes.push(obj);
     }
 
@@ -67,7 +69,8 @@ function calculateCosineSimilarity(vectorA, vectorB) {
  * @returns {Promise<{genre: string, classSimilarity: number}>}
  */
 async function cosineSimilarity(overview) {
-    let classes = await classVectors();//todo criar campo para selecionar metodo avg para o cosineSimilarity
+    let configs = await getEngineConfig();
+    let classes = await classVectors('cosine', configs);
     let doc;
     let arrayOfTerms = [];
     let similarityClasses = [];
@@ -116,27 +119,26 @@ async function classProbability(numberOfClassRecords, configs) {
  * @param {{occurrences: number, binary: number, tf: number, idf: number, tf_idf: number}} term
  * @param {number} numberOfDocs
  */
-function laplaceCorrection(terms, numberOfDocs) {
-    for (let i = 0; i < terms.length; i++) {
-        terms[i].occurrences += 1;
-        terms[i].binary += 1;
-        terms[i].tf = terms[i].occurrences / terms.length;
-        terms[i].idf = idf(numberOfDocs, terms[i].binary);
-        terms[i].tf_idf = tfidf(terms[i].tf, terms[i].idf);
-    }
-    return terms;
+function laplaceCorrection(term, numberOfDocs) {
+    term.occurrences += 1;
+    term.binary += 1;
+    //terms[i].tf = terms[i].occurrences / term.length;
+    //terms[i].idf = idf(numberOfDocs, terms[i].binary);
+    //terms[i].tf_idf = tfidf(terms[i].tf, terms[i].idf);
+    return term;
 }
 
 /**
  * @param {Array<{occurrences}>} arrayOfTerms
  * @param {number} denominator
+ * @param {{test_normalizer}} configs
  * @returns {number}
  */
-function termProbability(arrayOfTerms, denominator) {
+function termsProbability(arrayOfTerms, denominator, configs) {
     let termsProbability = 1;
 
-    for (let i = 0; i < arrayOfTerms.length;i++) {
-        termsProbability *= arrayOfTerms[i].occurrences / denominator;//todo adicionar normalizer À BD para usar aqui
+    for (let i = 0; i < arrayOfTerms.length; i++) {
+        termsProbability *= arrayOfTerms[i].occurrences * configs.test_normalizer / denominator;
     }
     return termsProbability;
 }
@@ -146,7 +148,7 @@ function termProbability(arrayOfTerms, denominator) {
  */
 async function classify(overview) {
     let configs = await getEngineConfig();
-    let classes = await classVectors();//todo criar campo para selecionar metodo sum para NaiveBayes
+    let classes = await classVectors('bayes', configs);
     let uniqueTerms = [];
     let doc;
     let arrayOfTerms = [];
@@ -179,9 +181,7 @@ async function classify(overview) {
             }
         }
 
-        let termProbability = termProbability(termsOfClass, classes[i].bagOfWords.length + uniqueTerms.length);
-
-        obj.classBayes = await classProbability(classRecords.length, configs) * termProbability;
+        obj.classBayes = await classProbability(classRecords.length, configs) * termsProbability(termsOfClass, classes[i].bagOfWords.length + uniqueTerms.length, configs);
 
         classesBayes.push(obj);
     }
@@ -193,4 +193,4 @@ async function classify(overview) {
 
     return maxBayes;
 }//todo testar
-//console.log(cosineSimilarity("this is a text woman"));
+console.log(classify("this is a text woman"));
