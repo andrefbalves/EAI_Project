@@ -119,6 +119,10 @@
                                 <select class="form-select" id="inputGroupSelect01" name="testCosine" required>
                                     <option value="" disabled selected hidden>Operation Cosine</option>
                                     <option value="sum"
+                                    <% if(configs.test_operation === 'sum') { %> selected
+                                            <% } %>
+                                    >Sum</option>
+                                    <option value="average"
                                     <% if(configs.test_operation === 'average') { %> selected
                                             <% } %>
                                     >Average</option>
@@ -134,6 +138,10 @@
                                     <% if(configs.test_operation === 'sum') { %> selected
                                             <% } %>
                                     >Sum</option>
+                                    <option value="average"
+                                    <% if(configs.test_operation === 'average') { %> selected
+                                            <% } %>
+                                    >Average</option>
                                 </select>
                             </div>
                         </div>
