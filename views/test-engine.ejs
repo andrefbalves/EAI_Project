@@ -92,7 +92,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mt-3">
+                    <div class="row mt-4">
                         <div class="col">
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">Operation</label>
@@ -115,24 +115,42 @@
                         </div>
                         <div class="col">
                             <div class="input-group">
-                                <label class="input-group-text" for="inputGroupSelect01">Type Of Gram</label>
-                                <select class="form-select" id="inputGroupSelect01" name="typeOfGram" required>
-                                    <option value="" disabled selected hidden>Choose Type of Gram...</option>
-                                    <option value="unigram"
-                                    <% if(configs.test_type_of_gram === 'unigram') { %> selected
-                                            <% } %>
-                                    >Unigram
-                                    </option>
-                                    >ASC</option>
-                                    <option value="bigram"
-                                    <% if(configs.test_type_of_gram === 'bigram') { %> selected
-                                            <% } %>
-                                    >Bigram
-                                    </option>
-                                    >DESC</option>
+                                <label class="input-group-text" for="inputGroupSelect01">Test Operation Cosine</label>
+                                <select class="form-select" id="inputGroupSelect01" name="testCosine" required>
+                                    <option value="" disabled selected hidden>Operation Cosine...</option>
                                 </select>
                             </div>
                         </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <label class="input-group-text" for="inputGroupSelect01">Test Bayes Operation</label>
+                                <select class="form-select" id="inputGroupSelect01" name="testBayes" required>
+                                    <option value="" disabled selected hidden>Operation Bayes...</option>
+                                </select>
+                            </div>
+                        </div>
+                        </div>
+                    <div class="row mt-4">
+                    <div class="col">
+                        <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect01">Type Of Gram</label>
+                            <select class="form-select" id="inputGroupSelect01" name="typeOfGram" required>
+                                <option value="" disabled selected hidden>Choose Type of Gram...</option>
+                                <option value="unigram"
+                                <% if(configs.test_type_of_gram === 'unigram') { %> selected
+                                        <% } %>
+                                >Unigram
+                                </option>
+                                >ASC</option>
+                                <option value="bigram"
+                                <% if(configs.test_type_of_gram === 'bigram') { %> selected
+                                        <% } %>
+                                >Bigram
+                                </option>
+                                >DESC</option>
+                            </select>
+                        </div>
+                    </div>
                         <div class="col">
                             <button class="btn btn-primary" type="submit" name="testBtn" value="save"><i
                                         class="bi bi-gear"></i> Save Settings
@@ -140,7 +158,7 @@
                             <a href="training-engine" class="btn btn-warning position-absolute ms-3"><i class="bi bi-speedometer2"></i>
                                 Let's Try the Classificator</a>
                         </div>
-                    </div>
+            </div>
                 </form>
             </div>
         </div>
