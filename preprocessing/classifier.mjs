@@ -1,12 +1,12 @@
 import {selectKBest} from "../database/terms.mjs";
 import {preprocessing} from "./index.mjs";
-import {exists, idf, tf, tfidf} from "./counting.mjs";
+import {exists, tf, tfidf} from "./counting.mjs";
 import {getEngineConfig, getActiveClasses} from "../database/engine.mjs";
 import {getTrainingSet} from "../database/trainingset.mjs";
 import {addUniqueTerms} from "../features/bagOfWords.mjs";
 
 /**
- * @param {Array<{name, tfidf, idf}>} arrayOfTerms
+ * @param {Array<{name, binary, occurrences, tf, idf, tfidf}>} arrayOfTerms
  * @returns {*[]}
  */
 function organizeClasses(arrayOfTerms) {
@@ -16,8 +16,11 @@ function organizeClasses(arrayOfTerms) {
         let obj = {};
 
         obj.name = arrayOfTerms[i].name.replace('`','');
-        obj.tfidf = arrayOfTerms[i].tfidf;
+        obj.binary = arrayOfTerms[i].binary;
+        obj.occurrences = arrayOfTerms[i].occurrences;
+        obj.tf = arrayOfTerms[i].tf;
         obj.idf = arrayOfTerms[i].idf;
+        obj.tfidf = arrayOfTerms[i].tfidf;
 
         bagOfWords.push(obj);
     }
@@ -116,15 +119,12 @@ async function classProbability(numberOfClassRecords, configs) {
 }
 
 /**
- * @param {{occurrences: number, binary: number, tf: number, idf: number, tf_idf: number}} term
- * @param {number} numberOfDocs
+ * @param {{occurrences: number, binary: number, name: string}} term
  */
-function laplaceCorrection(term, numberOfDocs) {
-    term.occurrences += 1;
-    term.binary += 1;
-    //terms[i].tf = terms[i].occurrences / term.length;
-    //terms[i].idf = idf(numberOfDocs, terms[i].binary);
-    //terms[i].tf_idf = tfidf(terms[i].tf, terms[i].idf);
+function laplaceCorrection(term) {
+    term.occurrences++;
+    term.binary++;
+
     return term;
 }
 
@@ -161,27 +161,34 @@ async function classify(overview) {
     for (let i = 0; i < classes.length; i++) {
         let classRecords = await getTrainingSet(classes[i].genre, configs);
 
-        for (let j = 0; j < classes[i].bagOfWords; j++) {
-            classes[i].bagOfWords[j] = laplaceCorrection(classes[i].bagOfWords[j], classRecords.length);
-            uniqueTerms = addUniqueTerms(uniqueTerms, classes[i].bagOfWords[j]);
+        for (let j = 0; j < classes[i].bagOfWords.length; j++) {
+            classes[i].bagOfWords[j] = laplaceCorrection(classes[i].bagOfWords[j]);
         }
+
+        uniqueTerms = addUniqueTerms(uniqueTerms, classes[i].bagOfWords);
     }
 
     for (let i = 0; i < classes.length; i++) {
         let classRecords = await getTrainingSet(classes[i].genre, configs);
-        let termsOfClass = [];
+        let termsOfDoc = [];
         let obj = {genre: classes[i].genre, classBayes: 0};
 
         for (let j = 0; j < arrayOfTerms.length; j++) {
+            let found = false;
+
             for (let k = 0; k < classes[i].bagOfWords.length; k++){
-                if (exists(classes[i].bagOfWords[k], arrayOfTerms[j]))
-                    termsOfClass.push(arrayOfTerms[j]);
-                else
-                    termsOfClass.push(laplaceCorrection(arrayOfTerms[j], classRecords.length));//todo adicionar o numero de docs
+                if (exists(classes[i].bagOfWords[k].name, arrayOfTerms[j].join(' '))) {
+                    found = true;
+                    termsOfDoc.push(classes[i].bagOfWords[k]);
+                    break;
+                }
             }
+
+            if (found === false)
+                termsOfDoc.push(laplaceCorrection({name: arrayOfTerms[j].join(' '), binary: 0, occurrences: 0}));//todo validar se é só os termos do doc em analise
         }
 
-        obj.classBayes = await classProbability(classRecords.length, configs) * termsProbability(termsOfClass, classes[i].bagOfWords.length + uniqueTerms.length, configs);
+        obj.classBayes = await classProbability(classRecords.length, configs) * termsProbability(termsOfDoc, classes[i].bagOfWords.length + uniqueTerms.length, configs);
 
         classesBayes.push(obj);
     }
@@ -192,5 +199,5 @@ async function classify(overview) {
     }
 
     return maxBayes;
-}//todo testar
-console.log(classify("this is a text woman"));
+}
+//console.log(classify("this is a text best friend"));

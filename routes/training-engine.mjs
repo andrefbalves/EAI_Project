@@ -15,7 +15,6 @@ trainRouter.get('/', async function (req, res, next) {
 
 trainRouter.post('/', async function (req, res, next) {
     let configs = await getEngineConfig();
-    let docs = await getTrainingSet('', configs);
     let classes = Array.isArray(req.body.classes) ? req.body.classes : req.body.classes.split(" ");
 
     if (req.body.formBtn === 'save') {
@@ -25,8 +24,10 @@ trainRouter.post('/', async function (req, res, next) {
     }
     else if(req.body.formBtn === 'train') {
         await process();
-        docs = await getTrainingSet('', configs);
     }
+
+    configs = await getEngineConfig();
+    let docs = await getTrainingSet('', configs);
 
     classes = await getClassesConfig();
 

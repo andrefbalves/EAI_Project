@@ -5,7 +5,6 @@ import {cleanTemplate, cleanTerms, saveTerms} from "../database/terms.mjs";
 import {getActiveClasses, getEngineConfig} from "../database/engine.mjs";
 import fs from "fs";
 
-
 /**
  * @param {Array<{unigrams: [], bigrams: []}>} docs
  * @param {Array<string>} bagOfUnigrams
@@ -17,15 +16,15 @@ function buildTerms(docs, bagOfUnigrams, bagOfBigrams) {
     docTerms = docTerms.concat(docs);
 
     for (let i = 0; i < docs.length; i++) {
-        docTerms[i].uniTerms = buildVector(bagOfUnigrams, docs[i].unigrams);
-        docTerms[i].biTerms = buildVector(bagOfBigrams, docs[i].bigrams);
+        docTerms[i].uniTerms = buildVector(bagOfUnigrams, docs[i].unigrams, docs.length);
+        docTerms[i].biTerms = buildVector(bagOfBigrams, docs[i].bigrams, docs.length);
     }
     return docTerms;
 }
 
 /**
  * @param {Array<{name: string, uniTerms: [], biTerms: []}>} docs
- * @param {Array<string>} bagOfGrams
+ * @param {Array} bagOfGrams
  * @param {number} n
  * @returns {Array<string>}
  */
@@ -35,7 +34,7 @@ function calculateTerms(docs, bagOfGrams, n) {
     for (let i = 0; i < bagOfGrams.length; i++) {
         let sameTerms = [];
         let obj = {};
-        obj.name = bagOfGrams[i][1] !== undefined ? bagOfGrams[i][0] + ' ' + bagOfGrams[i][1] : bagOfGrams[i][0];
+        obj.name = bagOfGrams[i].join(' ');
 
         for (let j = 0; j < docs.length; j++) {
             if(n === 1)
@@ -43,8 +42,8 @@ function calculateTerms(docs, bagOfGrams, n) {
             else
                 sameTerms.push(docs[j].biTerms.filter(doc => doc.name === obj.name));
         }
-        obj.sum = operateVector(sameTerms,'sum');
-        obj.average = operateVector(sameTerms,'average');
+        obj.sum = operateVector(sameTerms,'sum',docs.length);
+        obj.average = operateVector(sameTerms,'average',docs.length);
 
         bagOfWords.push(obj);
     }
