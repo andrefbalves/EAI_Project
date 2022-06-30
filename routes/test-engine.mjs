@@ -9,7 +9,7 @@ testRouter.get('/', async function (req, res, next) {
     let classes = await getActiveClasses();
     let bestTerms = await selectKBest('All','none', configs);
 
-    res.render('test-engine', { title: 'Test Engine', terms: bestTerms, classes: classes, genre: 'All', configs: configs});
+    res.render('test-engine', { title: 'Pre-Configuration Engine', terms: bestTerms, classes: classes, genre: 'All', configs: configs});
 });
 
 testRouter.post('/', async function (req, res, next) {
@@ -19,5 +19,5 @@ testRouter.post('/', async function (req, res, next) {
         let classes = await getActiveClasses();
         let bestTerms = await selectKBest(req.body.genre, 'none', configs);
 
-        res.render('test-engine', { title: 'Test Engine', terms: bestTerms, classes: classes,genre: req.body.genre, configs: configs});
+        res.render('test-engine', { title: 'Pre-Configuration Engine', terms: bestTerms, classes: classes,genre: req.body.genre, configs: configs});
 });

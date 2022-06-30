@@ -131,14 +131,14 @@ function laplaceCorrection(term) {
 /**
  * @param {Array<{occurrences}>} arrayOfTerms
  * @param {number} denominator
- * @param {{test_normalizer}} configs
+ * @param {{class_normalizer}} configs
  * @returns {number}
  */
 function termsProbability(arrayOfTerms, denominator, configs) {
     let termsProbability = 1;
 
     for (let i = 0; i < arrayOfTerms.length; i++) {
-        termsProbability *= arrayOfTerms[i].occurrences * configs.test_normalizer / denominator;
+        termsProbability *= arrayOfTerms[i].occurrences * configs.class_normalizer / denominator;
     }
     return termsProbability;
 }
