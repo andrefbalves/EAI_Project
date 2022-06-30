@@ -185,7 +185,7 @@ async function classify(overview) {
             }
 
             if (found === false)
-                termsOfDoc.push(laplaceCorrection({name: arrayOfTerms[j].join(' '), binary: 0, occurrences: 0}));//todo validar se é só os termos do doc em analise
+                termsOfDoc.push(laplaceCorrection({name: arrayOfTerms[j].join(' '), binary: 0, occurrences: 0}));
         }
 
         obj.classBayes = await classProbability(classRecords.length, configs) * termsProbability(termsOfDoc, classes[i].bagOfWords.length + uniqueTerms.length, configs);
