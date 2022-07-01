@@ -6,7 +6,7 @@ import {db} from "./config.mjs";
  * @returns {Array<{id: string, title: string, overview: string, genre: string, poster_path: string, release_date: date, runtime: number, status: string}>}
  */
 export async function getTrainingSet(genre, configs) {
-    let query = "SELECT corpus.* FROM trainingset INNER JOIN corpus ON corpus.imdb_id = trainingset.corpus_id";
+    let query = "SELECT corpus.* FROM training_set INNER JOIN corpus ON corpus.imdb_id = training_set.corpus_id";
     if (genre !== undefined && genre !== '') query += " WHERE genre = '" + genre + "'";
     if (configs !== undefined && configs !== '') query += " ORDER BY " + configs.train_order_by_field + " " + configs.train_order_by;
     let set = await db.execute(query);
@@ -18,7 +18,7 @@ export async function getTrainingSet(genre, configs) {
  * @returns {Promise<void>}
  */
 async function cleanTrainingSet() {
-    let query = "TRUNCATE TABLE trainingset";
+    let query = "TRUNCATE TABLE training_set";
 
     await db.execute(query);
 }
@@ -35,7 +35,7 @@ export async function setTrainingSet(classes, limit_of_records, order_by_field, 
     await cleanTrainingSet();
 
     for (let i = 0; i < classes.length; i++) {
-        let query = "INSERT INTO trainingset (corpus_id) " +
+        let query = "INSERT INTO training_set (corpus_id) " +
                     "SELECT imdb_id FROM corpus " +
                     "WHERE genre = '" + classes[i] + "' " +
                     "ORDER BY " + order_by_field + " " + order_by +
