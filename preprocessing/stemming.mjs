@@ -13,3 +13,4 @@ export function stemm(cleanedText) {
 
     return words;
 }
+

@@ -7,6 +7,7 @@ import logger from 'morgan';
 import {indexRouter} from './routes/index.mjs';
 import {usersRouter} from './routes/users.mjs';
 import {trainRouter} from './routes/training-engine.mjs';
+import {configurationRouter} from './routes/configuration-engine.mjs';
 import {testRouter} from './routes/test-engine.mjs';
 import {classifierRouter} from './routes/classifier-engine.mjs';
 
@@ -27,6 +28,7 @@ app.use('/public/images/', express.static('./public/images'));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/training-engine', trainRouter);
+app.use('/configuration-engine', configurationRouter);
 app.use('/test-engine', testRouter);
 app.use('/classifier-engine', classifierRouter);
 

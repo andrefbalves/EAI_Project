@@ -1,23 +1,35 @@
 import express from 'express';
-import {getActiveClasses, getEngineConfig, saveTestConfig} from "../database/engine.mjs";
-import {selectKBest} from "../database/terms.mjs";
+import {getClassesConfig, getEngineConfig, saveClassesConfig, saveTrainConfig} from '../database/engine.mjs';
+import {getTrainingSet, setTrainingSet} from "../database/trainingset.mjs";
+import {process} from "../preprocessing/train.mjs";
 export const testRouter = express.Router();
 
 /* GET training set. */
 testRouter.get('/', async function (req, res, next) {
+    let classes = await getClassesConfig();
     let configs = await getEngineConfig();
-    let classes = await getActiveClasses();
-    let bestTerms = await selectKBest('All','none', configs);
+    let docs = await getTrainingSet('', configs);
 
-    res.render('test-engine', { title: 'Pre-Configuration Engine', terms: bestTerms, classes: classes, genre: 'All', configs: configs});
+    res.render('test-engine', { title: 'Test Engine', docs: docs, classes: classes, configs: configs});
 });
 
 testRouter.post('/', async function (req, res, next) {
+    let configs = await getEngineConfig();
+    let classes = Array.isArray(req.body.classes) ? req.body.classes : req.body.classes.split(" ");
 
-        await saveTestConfig(req.body.limitRecords, req.body.metric, req.body.operation, req.body.typeOfGram);
-        let configs = await getEngineConfig();
-        let classes = await getActiveClasses();
-        let bestTerms = await selectKBest(req.body.genre, 'none', configs);
+    if (req.body.formBtn === 'save') {
+        await saveClassesConfig(req.body.classes);
+        await saveTrainConfig(req.body.limit, req.body.field, req.body.order);
+        await setTrainingSet(classes, req.body.limit, req.body.field, req.body.order);
+    }
+    else if(req.body.formBtn === 'train') {
+        await process();
+    }
 
-        res.render('test-engine', { title: 'Pre-Configuration Engine', terms: bestTerms, classes: classes,genre: req.body.genre, configs: configs});
+    configs = await getEngineConfig();
+    let docs = await getTrainingSet('', configs);
+
+    classes = await getClassesConfig();
+
+    res.render('test-engine', { title: 'Test Engine', docs: docs, classes: classes, configs: configs});
 });
