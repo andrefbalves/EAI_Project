@@ -71,21 +71,12 @@ export async function cleanTemplate() {
 
 /**
  * @param {string} genre
- * @param {string} classifier
- * @param {{class_operation, class_operation_cosine, class_operation_bayes, class_type_of_gram, class_order_by_metric, class_limit_of_records}} configs
+ * @param {{class_operation, class_operation, class_type_of_gram, class_order_by_metric, class_limit_of_records}} configs
  * @returns {Promise<*>}
  */
-export async function selectKBest(genre, classifier, configs) {
-    let operation;
+export async function selectKBest(genre, configs) {
 
-    if (classifier === 'cosine')
-        operation = configs.class_operation_cosine;
-    else if (classifier === 'bayes')
-        operation = configs.class_operation_bayes;
-    else
-        operation = configs.class_operation;
-
-    let query = "SELECT * FROM terms WHERE operation = '" + operation + "'";
+    let query = "SELECT * FROM terms WHERE operation = '" + configs.class_operation + "'";
     if (genre !== undefined && genre !== 'All' && genre !== '') query += " AND genre = '" + genre + "'";
     if (configs.class_type_of_gram !== undefined && configs.class_type_of_gram !== 'All' && configs.class_type_of_gram !== '') query += " AND typeOfGram = '" + configs.class_type_of_gram + "'";
     if (configs.class_order_by_metric !== undefined && configs.class_order_by_metric !== '') query += " ORDER BY " + configs.class_order_by_metric + " DESC";

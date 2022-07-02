@@ -13,9 +13,9 @@
             integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
             crossorigin="anonymous"></script>
 </head>
-<body>
+<body class="d-flex flex-column min-vh-100">
 <main>
-    <div class="container py-4">
+    <div class="container py-4 d-flex flex-column min-vh-100">
         <header class="pb-3 mb-4 border-bottom">
             <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                 <i class="bi bi-film me-2" style="font-size: 2rem;"></i>
@@ -31,25 +31,22 @@
             </div>
             <div class="container border-top">
                 <form method="post">
-                    <div class="row mt-3">
-                        <div class="col">
-                            <div class="input-group">
-                                <label class="input-group-text" for="inputGroupSelect01">Test Class</label>
-                                <select class="form-select" id="inputGroupSelect01" name="genre" required>
-                                    <option value="All"
-                                    <% if(genre === 'All') { %> selected
+                    <div class="row mt-2">
+                        <% for(var c = 0; c < classes.length; c++) { %>
+                            <div class="col">
+                                <div class="form-check form-switch">
+                                    <input class="form-check-input" type="checkbox" name="classes" disabled
+                                           value="<%= classes[c].genre %>"
+                                    <% if(classes[c].active) { %> checked
                                             <% } %>
-                                    >All Classes
-                                    </option>
-                                    <% for(var c = 0; c < classes.length; c++) { %>
-                                        <option value="<%= classes[c].genre %>"
-                                        <% if(genre === classes[c].genre) { %> selected
-                                                <% } %>
-                                        ><%= classes[c].genre %></option>
-                                    <% } %>
-                                </select>
+                                    >
+                                    <label class="form-check-label"
+                                           for="flexSwitchCheckDefault"><%= classes[c].genre %></label>
+                                </div>
                             </div>
-                        </div>
+                        <% } %>
+                    </div>
+                    <div class="row mt-3">
                         <div class="col">
                             <div class="input-group">
                                 <span class="input-group-text" id="basic-addon3">Number of Records</span>
@@ -91,8 +88,6 @@
                                 </select>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mt-3">
                         <div class="col">
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">Operation</label>
@@ -113,14 +108,8 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col">
-                            <div class="input-group">
-                                <span class="input-group-text" id="basic-addon3">Test Normalizer</span>
-                                <input type="number" class="form-control" id="basic-url" min="1"
-                                       aria-describedby="basic-addon3" value="<%= configs.class_normalizer%>"
-                                       name="testNormalizer" required>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="row mt-3">
                         <div class="col">
                             <div class="input-group">
                                 <label class="input-group-text" for="inputGroupSelect01">Type Of Gram</label>
@@ -143,17 +132,23 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="col">
+                            <div class="input-group">
+                                <span class="input-group-text" id="basic-addon3">Test Normalizer</span>
+                                <input type="number" class="form-control" id="basic-url" min="1"
+                                       aria-describedby="basic-addon3" value="<%= configs.class_normalizer %>"
+                                       name="testNormalizer" required>
+                            </div>
                         </div>
-                    <div class="row mt-3">
                         <div class="col">
                             <button class="btn btn-primary" type="submit" name="testBtn" value="save"><i
                                         class="bi bi-gear"></i> Save Settings
                             </button>
-                            <a href="classifier-engine" class="btn btn-warning position-absolute ms-3"><i class="bi bi-speedometer2"></i>
+                            <a href="classifier-engine" class="btn btn-warning position-absolute ms-3"><i
+                                        class="bi bi-speedometer2"></i>
                                 Let's Try the Classificator</a>
                         </div>
-            </div>
-
+                    </div>
                 </form>
             </div>
         </div>
@@ -184,7 +179,7 @@
             </tbody>
         </table>
         <!-- Footer -->
-        <footer class="pt-3 mt-4 text-muted border-top">
+        <footer class="pt-3 mt-4 text-muted border-top mt-auto">
             <div class="row">
                 <div class="text-start col">André Alves & João Pereira</div>
                 <div class="text-end col">Automatic Information Extraction © 2022</div>

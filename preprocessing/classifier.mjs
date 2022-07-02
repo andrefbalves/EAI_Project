@@ -39,7 +39,7 @@ async function classVectors(classifier, configs) {
     for (let i = 0; i < activeClasses.length; i++) {
         let obj = {genre: activeClasses[i].genre, bagOfWords: []};
 
-        obj.bagOfWords = organizeClasses(await selectKBest(activeClasses[i].genre, classifier, configs));
+        obj.bagOfWords = organizeClasses(await selectKBest(activeClasses[i].genre, configs));
         classes.push(obj);
     }
 
@@ -65,46 +65,6 @@ function calculateCosineSimilarity(vectorA, vectorB) {
     let result = axb / (Math.sqrt(aSquare) * Math.sqrt(bSquare));
 
     return Number.isNaN(result) ? 0 : result;
-}
-
-/**
- * @param {string} overview
- * @returns {Promise<{genre: string, classSimilarity: number}>}
- */
-async function cosineSimilarity(overview) {
-    let configs = await getEngineConfig();
-    let classes = await classVectors('cosine', configs);
-    let doc;
-    let arrayOfTerms = [];
-    let similarityClasses = [];
-    let maxSimilarity = {genre: '', classSimilarity: 0};
-
-    doc = preprocessing('', overview);
-    arrayOfTerms = doc.unigrams.concat(doc.bigrams);
-
-    for (let i = 0; i < classes.length; i++) {
-        let terms = [];
-        let obj = {genre: classes[i].genre, classSimilarity: 0};
-
-        for (let j = 0; j < classes[i].bagOfWords.length; j++) {
-            let term = {};
-
-            term.name = classes[i].bagOfWords[j].name;
-            term.tfidf = tfidf(tf(classes[i].bagOfWords[j].name.split(' '), arrayOfTerms), classes[i].bagOfWords[j].idf);
-
-            terms.push(term);
-        }
-
-        obj.classSimilarity = calculateCosineSimilarity(classes[i].bagOfWords, terms);
-        similarityClasses.push(obj);
-    }
-
-    for (let i = 0; i< similarityClasses.length; i++) {
-        if (maxSimilarity.classSimilarity < similarityClasses[i].classSimilarity)
-            maxSimilarity = similarityClasses[i];
-    }
-
-    return maxSimilarity;
 }
 
 /**
@@ -145,8 +105,48 @@ function termsProbability(arrayOfTerms, denominator, configs) {
 
 /**
  * @param {string} overview
+ * @returns {Promise<{genre: string, classSimilarity: number}>}
  */
-async function classify(overview) {
+export async function classifyCosineSimilarity(overview) {
+    let configs = await getEngineConfig();
+    let classes = await classVectors('cosine', configs);
+    let doc;
+    let arrayOfTerms = [];
+    let similarityClasses = [];
+    let maxSimilarity = {genre: '', classSimilarity: 0};
+
+    doc = preprocessing('', overview);
+    arrayOfTerms = doc.unigrams.concat(doc.bigrams);
+
+    for (let i = 0; i < classes.length; i++) {
+        let terms = [];
+        let obj = {genre: classes[i].genre, classSimilarity: 0};
+
+        for (let j = 0; j < classes[i].bagOfWords.length; j++) {
+            let term = {};
+
+            term.name = classes[i].bagOfWords[j].name;
+            term.tfidf = tfidf(tf(classes[i].bagOfWords[j].name.split(' '), arrayOfTerms), classes[i].bagOfWords[j].idf);
+
+            terms.push(term);
+        }
+
+        obj.classSimilarity = calculateCosineSimilarity(classes[i].bagOfWords, terms);
+        similarityClasses.push(obj);
+    }
+
+    for (let i = 0; i< similarityClasses.length; i++) {
+        if (maxSimilarity.classSimilarity < similarityClasses[i].classSimilarity)
+            maxSimilarity = similarityClasses[i];
+    }
+
+    return maxSimilarity;
+}
+
+/**
+ * @param {string} overview
+ */
+export async function classifyNaiveBayes(overview) {
     let configs = await getEngineConfig();
     let classes = await classVectors('bayes', configs);
     let uniqueTerms = [];
@@ -200,4 +200,3 @@ async function classify(overview) {
 
     return maxBayes;
 }
-//console.log(classify("this is a text best friend"));

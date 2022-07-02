@@ -15,7 +15,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 <main>
-    <div class="container py-4">
+    <div class="container py-4 d-flex flex-column min-vh-100">
         <header class="pb-3 mb-4 border-bottom">
             <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                 <i class="bi bi-film me-2" style="font-size: 2rem;"></i>
@@ -105,10 +105,15 @@
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-primary me-3" onclick="saved()" type="submit" name="formBtn" value="save"><i class="bi bi-gear"></i> Save Settings</button>
-                            <button class="btn btn-warning position-absolute" onclick="testingEngine()" type="submit" name="formBtn" value="test">
-                                <div class="spinner-border spinner-border-sm text-danger d-none" role="status" id='spinner'>
-                                </div><i class="bi bi-arrow-repeat"id="iconTrain"></i>
+                            <button class="btn btn-primary me-3" onclick="saved()" type="submit" name="formBtn"
+                                    value="save"><i class="bi bi-gear"></i> Save Settings
+                            </button>
+                            <button class="btn btn-warning position-absolute" onclick="testingEngine()" type="submit"
+                                    name="formBtn" value="test">
+                                <div class="spinner-border spinner-border-sm text-danger d-none" role="status"
+                                     id='spinner'>
+                                </div>
+                                <i class="bi bi-arrow-repeat" id="iconTrain"></i>
                                 Test Engine
                             </button>
                         </div>
@@ -142,7 +147,8 @@
                     </tr>
                 <% } %>
                 </tbody>
-            </table></div>
+            </table>
+        </div>
         <!-- Footer -->
         <footer class="pt-3 mt-4 text-muted border-top mt-auto">
             <div class="row">
@@ -160,7 +166,8 @@
         spinner.classList.remove("d-none");
 
     }
-    function  saved() {
+
+    function saved() {
         const element = document.getElementById("alertSaved");
         element.classList.remove("d-none");
     }

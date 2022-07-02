@@ -1,6 +1,7 @@
 import express from 'express';
-import {getClassesConfig, getEngineConfig, saveTestConfig} from '../database/engine.mjs';
+import {getActiveClasses, getClassesConfig, getEngineConfig, saveTestConfig} from '../database/engine.mjs';
 import {setTestingSet, getTestingSet} from "../database/testingset.mjs";
+import {testEngine} from "../preprocessing/stats.mjs";
 export const testRouter = express.Router();
 
 /* GET training set. */
@@ -14,21 +15,19 @@ testRouter.get('/', async function (req, res, next) {
 });
 
 testRouter.post('/', async function (req, res, next) {
+    let configs = await getEngineConfig();
     let classes = await getClassesConfig();
+    let activeClasses = await getActiveClasses();
+    let docs = [];
 
     if (req.body.formBtn === 'save') {
-
         await saveTestConfig(req.body.limit, req.body.field, req.body.order);
-
+        await setTestingSet(activeClasses, req.body.limit, req.body.field, req.body.order, configs);
+    }else if (req.body.formBtn === 'test') {
+        await testEngine();
     }
 
-    let configs = await getEngineConfig();
-
-    if (req.body.formBtn === 'test') {
-
-        await setTestingSet(classes, req.body.limit, req.body.field, req.body.order, configs)
-    }
-    let docs = await getTestingSet('', configs);
+    docs = await getTestingSet(configs);
 
     res.render('test-engine', { title: 'Test Engine', docs: docs, classes: classes, configs: configs});
 });

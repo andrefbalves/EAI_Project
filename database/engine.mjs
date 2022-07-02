@@ -40,7 +40,7 @@ export async function saveClassesConfig(activesClasses) {
  * @param typeOfGram
  * @returns {Promise<boolean>}
  */
-export async function saveConfigurationConfig(limitRecords, metric, operation, typeOfGram) {
+export async function saveSelectionConfig(limitRecords, metric, operation, typeOfGram) {
     let query = "UPDATE engine_config SET class_limit_of_records = " + limitRecords  + ", class_order_by_metric = '" + metric + "', class_operation = '" + operation + "', class_type_of_gram = '" + typeOfGram + "'";
     await db.execute(query);
     return true;

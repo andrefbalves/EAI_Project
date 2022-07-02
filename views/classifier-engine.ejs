@@ -15,7 +15,7 @@
 </head>
 <body class="d-flex flex-column min-vh-100">
 <main>
-    <div class="container py-4">
+    <div class="container py-4 d-flex flex-column min-vh-100">
         <header class="pb-3 mb-4 border-bottom">
             <a href="/" class="d-flex align-items-center text-dark text-decoration-none">
                 <i class="bi bi-film me-2" style="font-size: 2rem;"></i>
@@ -25,35 +25,71 @@
         <div class="p-5 mb-4 bg-light rounded-3">
             <div class="container-fluid py-1">
                 <h1 class="display-5 fw-bold"><%= title %></h1>
-                <p class="col-md-8 fs-4">Este classificador vai ficar hiper mega super ridiculamente giro lindo
-                    bonito</p>
+                <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one
+                    in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it
+                    to your liking.</p>
             </div>
             <div class="container border-top">
+                <div class="row mt-2">
+                    <% for(var c = 0; c < classes.length; c++) { %>
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" name="classes" disabled
+                                       value="<%= classes[c].genre %>"
+                                <% if(classes[c].active) { %> checked
+                                        <% } %>
+                                >
+                                <label class="form-check-label"
+                                       for="flexSwitchCheckDefault"><%= classes[c].genre %></label>
+                            </div>
+                        </div>
+                    <% } %>
+                </div>
                 <form method="post">
                     <div class="row mt-2">
                         <div class="col">
                             <div class="form-check form-switch">
                                 <div class="mb-2">
-                                    <label for="textarea1"><b>Zona de Input de Texto</b></label>
+                                    <label for="textarea1"><b>Overview</b></label>
                                 </div>
                                 <textarea class="form-control" id="textarea1" rows="6"
                                           placeholder="Text to Classify..."></textarea>
                             </div>
                         </div>
                         <div class="col mt-4">
-                            <div class="input-group">
-                                <button type="submit" class="btn btn-warning">Classify Text</button>
-                            </div>
-                            <div class="col mt-4">
+                            <div class="row">
                                 <div class="input-group">
-                                    <span class="input-group-text" id="inputResult">Classifier Result</span>
-                                    <input type="text" class="form-control" id="inputResult"
-                                           name="nameSomething" placeholder="Result to be displayed..." readonly>
+                                    <button type="submit" class="btn btn-warning">Run the Classifier</button>
                                 </div>
                             </div>
-                            <div class="col mt-4">
+                            <div class="row mt-3">
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="inputResult">Cosine Similarity</span>
+                                        <input type="text" class="form-control" id="inputResult"
+                                               name="nameSomething" placeholder="Result to be displayed..." readonly>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="inputResult">Naive Bayes</span>
+                                        <input type="text" class="form-control" id="inputResult"
+                                               name="nameSomething" placeholder="Result to be displayed..." readonly>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
                                 <div class="input-group">
-                                    <button type="submit" class="btn btn-primary">Add Input</button>
+                                    <label class="input-group-text">Real Class</label>
+                                    <select class="form-select" name="realClass" required>
+                                        <% for(var c = 0; c < classes.length; c++) { %>
+                                            <option value="<%= classes[c].genre %>"
+                                            <% if(classes[c].genre === 'teste') { %> selected
+                                                    <% } %>
+                                            ><%= classes[c].genre %>
+                                            </option>
+                                        <% } %>
+                                    </select>
                                 </div>
                             </div>
                         </div>
@@ -61,35 +97,128 @@
                 </form>
             </div>
             <div class="container border-top">
-                <div class="row">
-                    <div class="col">
-                        <div class="table-responsive">
-                            <table class="table table-hover">
-                                <thead>
-                                <tr>
-                                    <td rowspan="2"></td>
-                                    <% for(var i = 0; i < confusionMatrix.genres.length; i++) { %>
-                                        <th class="text-center"><%= confusionMatrix.genres[i] %></th>
-                                    <% } %>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <% for(var j = 0; j < confusionMatrix.matrix.length; j++) { %>
-                                    <tr>
-                                        <th scope="row"><%= confusionMatrix.genres[j] %></th>
-                                        <% for(var k = 0; k < confusionMatrix.matrix[j].length; k++) { %>
-                                            <td class="text-center"><%= confusionMatrix.matrix[j][k] %></td>
-                                        <% } %>
-                                    </tr>
-                                <% } %>
-                                </tbody>
-                            </table>
-                        </div>
+                <div class="d-flex p-2 align-items-start mt-4">
+                    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
+                         aria-orientation="vertical">
+                        <button class="nav-link active" id="v-pills-cosine-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-cosine" type="button" role="tab" aria-controls="v-pills-cosine"
+                                aria-selected="true">Cosine Similarity
+                        </button>
+                        <button class="nav-link" id="v-pills-bayes-tab" data-bs-toggle="pill"
+                                data-bs-target="#v-pills-bayes" type="button" role="tab" aria-controls="v-pills-bayes"
+                                aria-selected="false">Naive Bayes
+                        </button>
                     </div>
-                    <div class="col"></div>
+                    <div class="tab-content row" id="v-pills-tabContent">
+                            <div class="tab-pane fade show active" id="v-pills-cosine" role="tabpanel"
+                                 aria-labelledby="v-pills-cosine-tab">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="table-responsive" id="cosineMatrix">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <td rowspan="2"></td>
+                                                    <% for(var i = 0; i < cosineStats.confusionMatrix.genres.length; i++) { %>
+                                                        <th class="text-center"><%= cosineStats.confusionMatrix.genres[i] %></th>
+                                                    <% } %>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <% for(var j = 0; j < cosineStats.confusionMatrix.matrix.length; j++) { %>
+                                                    <tr>
+                                                        <th scope="row"><%= cosineStats.confusionMatrix.genres[j] %></th>
+                                                        <% for(var k = 0; k < cosineStats.confusionMatrix.matrix[j].length; k++) { %>
+                                                            <td class="text-center"><%= cosineStats.confusionMatrix.matrix[j][k] %></td>
+                                                        <% } %>
+                                                    </tr>
+                                                <% } %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputResult">Precision</span>
+                                            <input type="text" class="form-control" id="inputPrecision"
+                                                   name="nameSomething" placeholder="Result to be displayed..."
+                                                   readonly>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputResult">Recall</span>
+                                            <input type="text" class="form-control" id="inputPrecision"
+                                                   name="nameSomething" placeholder="Result to be displayed..."
+                                                   readonly>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputResult">FScore</span>
+                                            <input type="text" class="form-control" id="inputPrecision"
+                                                   name="nameSomething" placeholder="Result to be displayed..."
+                                                   readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade" id="v-pills-bayes" role="tabpanel"
+                                 aria-labelledby="v-pills-bayes-tab">
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="table-responsive" id="bayesMatrix">
+                                            <table class="table table-hover">
+                                                <thead>
+                                                <tr>
+                                                    <td rowspan="2"></td>
+                                                    <% for(var i = 0; i < bayesStats.confusionMatrix.genres.length; i++) { %>
+                                                        <th class="text-center"><%= bayesStats.confusionMatrix.genres[i] %></th>
+                                                    <% } %>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <% for(var j = 0; j < bayesStats.confusionMatrix.matrix.length; j++) { %>
+                                                    <tr>
+                                                        <th scope="row"><%= bayesStats.confusionMatrix.genres[j] %></th>
+                                                        <% for(var k = 0; k < bayesStats.confusionMatrix.matrix[j].length; k++) { %>
+                                                            <td class="text-center"><%= bayesStats.confusionMatrix.matrix[j][k] %></td>
+                                                        <% } %>
+                                                    </tr>
+                                                <% } %>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputResult">Precision</span>
+                                            <input type="text" class="form-control" id="inputPrecision"
+                                                   name="nameSomething" placeholder="Result to be displayed..."
+                                                   readonly>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputResult">Recall</span>
+                                            <input type="text" class="form-control" id="inputPrecision"
+                                                   name="nameSomething" placeholder="Result to be displayed..."
+                                                   readonly>
+                                        </div>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputResult">FScore</span>
+                                            <input type="text" class="form-control" id="inputPrecision"
+                                                   name="nameSomething" placeholder="Result to be displayed..."
+                                                   readonly>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
                 </div>
             </div>
         </div>
+        <!-- Footer -->
+        <footer class="pt-3 mt-4 text-muted border-top mt-auto">
+            <div class="row">
+                <div class="text-start col">André Alves & João Pereira</div>
+                <div class="text-end col">Automatic Information Extraction © 2022</div>
+            </div>
+        </footer>
     </div>
 </main>
 </body>

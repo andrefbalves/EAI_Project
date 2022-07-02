@@ -1,14 +1,17 @@
-import {getResults} from "../database/results.mjs";
+import {getResults, saveResults} from "../database/results.mjs";
 import ConfusionMatrix from "ml-confusion-matrix";
+import {getTestingSet} from "../database/testingset.mjs";
+import {classifyCosineSimilarity, classifyNaiveBayes} from "./classifier.mjs";
 
 /**
+ * @param {string} classifier cosine or bayes
  * @returns {Promise<ConfusionMatrix>}
  */
-async function getConfusionMatrix() {
+async function getConfusionMatrix(classifier) {
     let results = await getResults();
 
     let realClasses = results.map(a => a.real_class);
-    let predictedClasses = results.map(a => a.predicted_class);
+    let predictedClasses = results.map(a => (classifier === 'cosine' ? a.cosine_class : a.bayes_class));
 
     return ConfusionMatrix.fromLabels(realClasses, predictedClasses);
 }
@@ -26,14 +29,15 @@ function transposeMatrix(confusionMatrix) {
 }
 
 /**
+ * @param {string} classifier cosine or bayes
  * @returns {Promise<{fScore: number, confusionMatrix: {genres, matrix: *[]}, precision: number, recall: number}>}
  */
-export async function getStats() {
+export async function getStats(classifier) {
     let truePositives = 0;
     let falsePositives = 0;
     let falseNegatives = 0;
 
-    let confusionMatrix = await getConfusionMatrix();
+    let confusionMatrix = await getConfusionMatrix(classifier);
 
     if(confusionMatrix.labels.length === 2) {
         truePositives = confusionMatrix.matrix[0][0];
@@ -55,4 +59,25 @@ export async function getStats() {
     confusionMatrix = transposeMatrix(confusionMatrix);
 
     return {confusionMatrix, precision, recall, fScore};
+}
+
+/**
+ * @returns {Promise<void>}
+ */
+export async function testEngine() {
+    let docs = await getTestingSet();
+    let results = [];
+
+    for (let i = 0; i < docs.length; i++) {
+        let obj = {doc: '', cosineClass: '', bayesClass: '', realClass: ''};
+
+        obj.doc = docs[i].overview;
+        obj.realClass = docs[i].genre;
+        obj.cosineClass = await classifyCosineSimilarity(docs[i].overview);
+        obj.bayesClass = await classifyNaiveBayes(docs[i].overview);
+
+        results.push(obj);
+    }
+
+    await saveResults(results);
 }

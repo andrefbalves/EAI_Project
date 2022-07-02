@@ -1,17 +1,21 @@
 import express from 'express';
 import {getStats} from "../preprocessing/stats.mjs";
+import {getClassesConfig} from "../database/engine.mjs";
 
 export const classifierRouter = express.Router();
 
 /* GET training set. */
 classifierRouter.get('/', async function (req, res, next) {
-    let stats = await getStats();
+    let classes = await getClassesConfig();
+    let cosineStats = await getStats('cosine');
+    let bayesStats = await getStats('bayes');
+    let realClasse = req.body.realClass;
 
     res.render('classifier-engine', {
         title: 'Classifier Engine',
-        confusionMatrix: stats.confusionMatrix,
-        precision: stats.precision,
-        recall: stats.recall,
-        fScore: stats.fScore
+        classes: classes,
+        realClasse: realClasse,
+        cosineStats: cosineStats,
+        bayesStats: bayesStats
     });
 });
