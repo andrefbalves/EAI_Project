@@ -1,35 +1,34 @@
 import express from 'express';
-import {getClassesConfig, getEngineConfig, saveClassesConfig, saveTrainConfig} from '../database/engine.mjs';
-import {getTrainingSet, setTrainingSet} from "../database/trainingset.mjs";
-import {process} from "../preprocessing/train.mjs";
+import {getClassesConfig, getEngineConfig, saveTestConfig} from '../database/engine.mjs';
+import {setTestingSet, getTestingSet} from "../database/testingset.mjs";
 export const testRouter = express.Router();
 
 /* GET training set. */
 testRouter.get('/', async function (req, res, next) {
+
     let classes = await getClassesConfig();
     let configs = await getEngineConfig();
-    let docs = await getTrainingSet('', configs);
+    let docs = await getTestingSet('', configs);
 
     res.render('test-engine', { title: 'Test Engine', docs: docs, classes: classes, configs: configs});
 });
 
 testRouter.post('/', async function (req, res, next) {
-    let configs = await getEngineConfig();
-    let classes = Array.isArray(req.body.classes) ? req.body.classes : req.body.classes.split(" ");
+    let classes = await getClassesConfig();
 
     if (req.body.formBtn === 'save') {
-        await saveClassesConfig(req.body.classes);
-        await saveTrainConfig(req.body.limit, req.body.field, req.body.order);
-        await setTrainingSet(classes, req.body.limit, req.body.field, req.body.order);
-    }
-    else if(req.body.formBtn === 'train') {
-        await process();
+
+        await saveTestConfig(req.body.limit, req.body.field, req.body.order);
+
     }
 
-    configs = await getEngineConfig();
-    let docs = await getTrainingSet('', configs);
+    let configs = await getEngineConfig();
 
-    classes = await getClassesConfig();
+    if (req.body.formBtn === 'test') {
+
+        await setTestingSet(classes, req.body.limit, req.body.field, req.body.order, configs)
+    }
+    let docs = await getTestingSet('', configs);
 
     res.render('test-engine', { title: 'Test Engine', docs: docs, classes: classes, configs: configs});
 });

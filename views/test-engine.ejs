@@ -51,7 +51,7 @@
                             <div class="input-group">
                                 <span class="input-group-text">Limit of records by class</span>
                                 <input type="number" class="form-control" name="limit" min="0" step="1"
-                                       aria-describedby="basic-addon3" value="<%= configs.train_limit_of_records %>"
+                                       aria-describedby="basic-addon3" value="<%= configs.test_limit_of_records %>"
                                        required>
                             </div>
                         </div>
@@ -60,27 +60,27 @@
                                 <label class="input-group-text">Order by</label>
                                 <select class="form-select" name="field" required>
                                     <option value="imdb_id"
-                                    <% if(configs.train_order_by_field === 'imdb_id') { %> selected
+                                    <% if(configs.test_order_by_field === 'imdb_id') { %> selected
                                             <% } %>
                                     >Imdb Id
                                     </option>
                                     <option value="original_title"
-                                    <% if(configs.train_order_by_field === 'original_title') { %> selected
+                                    <% if(configs.test_order_by_field === 'original_title') { %> selected
                                             <% } %>
                                     >Title
                                     </option>
                                     <option value="overview"
-                                    <% if(configs.train_order_by_field === 'overview') { %> selected
+                                    <% if(configs.test_order_by_field === 'overview') { %> selected
                                             <% } %>
                                     >Overview
                                     </option>
                                     <option value="release_date"
-                                    <% if(configs.train_order_by_field === 'release_date') { %> selected
+                                    <% if(configs.test_order_by_field === 'release_date') { %> selected
                                             <% } %>
                                     >Release Date
                                     </option>
                                     <option value="genre"
-                                    <% if(configs.train_order_by_field === 'genre') { %> selected
+                                    <% if(configs.test_order_by_field === 'genre') { %> selected
                                             <% } %>
                                     >Genre
                                     </option>
@@ -92,12 +92,12 @@
                                 <label class="input-group-text">Order by</label>
                                 <select class="form-select" name="order" required>
                                     <option value="ASC"
-                                    <% if(configs.train_order_by === 'ASC') { %> selected
+                                    <% if(configs.test_order_by === 'ASC') { %> selected
                                             <% } %>
                                     >ASC
                                     </option>
                                     <option value="DESC"
-                                    <% if(configs.train_order_by === 'DESC') { %> selected
+                                    <% if(configs.test_order_by === 'DESC') { %> selected
                                             <% } %>
                                     >DESC
                                     </option>
@@ -106,7 +106,7 @@
                         </div>
                         <div class="col-sm-3">
                             <button class="btn btn-primary me-3" onclick="saved()" type="submit" name="formBtn" value="save"><i class="bi bi-gear"></i> Save Settings</button>
-                            <button class="btn btn-warning position-absolute" onclick="trainingEngine()" type="submit" name="formBtn" value="train">
+                            <button class="btn btn-warning position-absolute" onclick="testingEngine()" type="submit" name="formBtn" value="test">
                                 <div class="spinner-border spinner-border-sm text-danger d-none" role="status" id='spinner'>
                                 </div><i class="bi bi-arrow-repeat"id="iconTrain"></i>
                                 Test Engine
@@ -153,7 +153,7 @@
     </div>
 </main>
 <script>
-    function trainingEngine() {
+    function testingEngine() {
         const icon = document.getElementById("iconTrain");
         const spinner = document.getElementById("spinner");
         icon.classList.add("d-none");

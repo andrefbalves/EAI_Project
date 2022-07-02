@@ -40,7 +40,7 @@ export async function saveClassesConfig(activesClasses) {
  * @param typeOfGram
  * @returns {Promise<boolean>}
  */
-export async function saveTestConfig(limitRecords, metric, operation, typeOfGram) {
+export async function saveConfigurationConfig(limitRecords, metric, operation, typeOfGram) {
     let query = "UPDATE engine_config SET class_limit_of_records = " + limitRecords  + ", class_order_by_metric = '" + metric + "', class_operation = '" + operation + "', class_type_of_gram = '" + typeOfGram + "'";
     await db.execute(query);
     return true;
@@ -57,6 +57,20 @@ export async function saveTrainConfig(limit, field, orderBy) {
     await db.execute(query);
     return true;
 }
+
+/**
+ * @param {number} limit
+ * @param {string} field
+ * @param {string} orderBy
+ * @returns {Promise<boolean>}
+ */
+
+export async function saveTestConfig(limit,field, orderBy) {
+    let query = "UPDATE engine_config SET test_limit_of_records = " + limit + ", test_order_by_field = '" + field + "', test_order_by = '" + orderBy + "'";
+    await db.execute(query);
+    return true;
+}
+
 
 /**
  * @returns {Promise<*>}
