@@ -23,7 +23,8 @@ trainRouter.post('/', async function (req, res, next) {
         await saveClassesConfig(req.body.classes);
         await saveTrainConfig(req.body.limit, req.body.field, req.body.order);
         await setTrainingSet(classes, req.body.limit, req.body.field, req.body.order);
-    } else if (req.body.formBtn === 'train') {
+    }
+    else if (req.body.formBtn === 'train') {
         await process();
     }
 

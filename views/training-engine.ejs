@@ -121,28 +121,29 @@
             </div>
         </div>
         <div class="table-responsive">
-        <table class="table table-hover">
-            <thead>
-            <tr>
-                <th>IMDB ID</th>
-                <th class="text-center">Title</th>
-                <th>Overview</th>
-                <th class="col-sm-2 text-center">Release Date</th>
-                <th>Genre</th>
-            </tr>
-            </thead>
-            <tbody>
-            <% for(var i = 0; i < docs.length; i++) { %>
+            <table class="table table-hover">
+                <thead>
                 <tr>
-                    <td><%= docs[i].imdb_id %></td>
-                    <td class="text-center"><%= docs[i].original_title %></td>
-                    <td><%= docs[i].overview %></td>
-                    <td class="col-sm-2 text-center"><%= docs[i].release_date %></td>
-                    <td><%= docs[i].genre %></td>
+                    <th>IMDB ID</th>
+                    <th class="text-center">Title</th>
+                    <th>Overview</th>
+                    <th class="col-sm-2 text-center">Release Date</th>
+                    <th>Genre</th>
                 </tr>
-            <% } %>
-            </tbody>
-        </table></div>
+                </thead>
+                <tbody>
+                <% for(var i = 0; i < docs.length; i++) { %>
+                    <tr>
+                        <td><%= docs[i].imdb_id %></td>
+                        <td class="text-center"><%= docs[i].original_title %></td>
+                        <td><%= docs[i].overview %></td>
+                        <td class="col-sm-2 text-center"><%= docs[i].release_date %></td>
+                        <td><%= docs[i].genre %></td>
+                    </tr>
+                <% } %>
+                </tbody>
+            </table>
+        </div>
         <!-- Footer -->
         <footer class="pt-3 mt-4 text-muted border-top mt-auto">
             <div class="row">

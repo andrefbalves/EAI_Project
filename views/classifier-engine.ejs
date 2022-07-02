@@ -25,19 +25,21 @@
         <div class="p-5 mb-4 bg-light rounded-3">
             <div class="container-fluid py-1">
                 <h1 class="display-5 fw-bold"><%= title %></h1>
-                <p class="col-md-8 fs-4">Este classificador vai ficar hiper mega super ridiculamente giro lindo bonito</p>
+                <p class="col-md-8 fs-4">Este classificador vai ficar hiper mega super ridiculamente giro lindo
+                    bonito</p>
             </div>
             <div class="container border-top">
                 <form method="post">
                     <div class="row mt-2">
-                            <div class="col">
-                                <div class="form-check form-switch">
-                                    <div class="mb-2">
-                                        <label for="textarea1"><b>Zona de Input de Texto</b></label>
-                                    </div>
-                                    <textarea class="form-control" id="textarea1" rows="6" placeholder="Text to Classify..."></textarea>
+                        <div class="col">
+                            <div class="form-check form-switch">
+                                <div class="mb-2">
+                                    <label for="textarea1"><b>Zona de Input de Texto</b></label>
                                 </div>
+                                <textarea class="form-control" id="textarea1" rows="6"
+                                          placeholder="Text to Classify..."></textarea>
                             </div>
+                        </div>
                         <div class="col mt-4">
                             <div class="input-group">
                                 <button type="submit" class="btn btn-warning">Classify Text</button>
@@ -54,12 +56,40 @@
                                     <button type="submit" class="btn btn-primary">Add Input</button>
                                 </div>
                             </div>
+                        </div>
                     </div>
-                    </div>
-
                 </form>
             </div>
-    </div>
+            <div class="container border-top">
+                <div class="row">
+                    <div class="col">
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead>
+                                <tr>
+                                    <td rowspan="2"></td>
+                                    <% for(var i = 0; i < confusionMatrix.genres.length; i++) { %>
+                                        <th class="text-center"><%= confusionMatrix.genres[i] %></th>
+                                    <% } %>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <% for(var j = 0; j < confusionMatrix.matrix.length; j++) { %>
+                                    <tr>
+                                        <th scope="row"><%= confusionMatrix.genres[j] %></th>
+                                        <% for(var k = 0; k < confusionMatrix.matrix[j].length; k++) { %>
+                                            <td class="text-center"><%= confusionMatrix.matrix[j][k] %></td>
+                                        <% } %>
+                                    </tr>
+                                <% } %>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="col"></div>
+                </div>
+            </div>
+        </div>
     </div>
 </main>
 </body>

@@ -14,7 +14,19 @@ async function getConfusionMatrix() {
 }
 
 /**
- * @returns {Promise<{fScore: number, confusionMatrix: ConfusionMatrix, precision: number, recall: number}>}
+ * @param {ConfusionMatrix} confusionMatrix
+ * @returns {{genres, matrix: *[]}}
+ */
+function transposeMatrix(confusionMatrix) {
+    let confusionMatrixTable = {genres: confusionMatrix.labels, matrix: []};
+
+    confusionMatrixTable.matrix = confusionMatrix.matrix[0].map((_, colIndex) => confusionMatrix.matrix.map(row => row[colIndex]));
+
+    return  confusionMatrixTable;
+}
+
+/**
+ * @returns {Promise<{fScore: number, confusionMatrix: {genres, matrix: *[]}, precision: number, recall: number}>}
  */
 export async function getStats() {
     let truePositives = 0;
@@ -40,6 +52,7 @@ export async function getStats() {
     let recall = truePositives / (truePositives + falseNegatives);
     let fScore = 2 * (precision * recall) / (precision + recall);
 
+    confusionMatrix = transposeMatrix(confusionMatrix);
+
     return {confusionMatrix, precision, recall, fScore};
 }
-
