@@ -25,9 +25,9 @@
         <div class="p-5 mb-4 bg-light rounded-3">
             <div class="container-fluid py-1">
                 <h1 class="display-5 fw-bold"><%= title %></h1>
-                <p class="col-md-8 fs-4">Using a series of utilities, you can create this jumbotron, just like the one
-                    in previous versions of Bootstrap. Check out the examples below for how you can remix and restyle it
-                    to your liking.</p>
+                <p class="col-md-8 fs-4">Train your model on an already classified data set. Choose which classes you
+                    want to evaluate in your model against the chosen training data. Change the set of parameters
+                    provided to alter the training of your model.</p>
             </div>
             <div class="container border-top">
                 <form method="post">
@@ -105,10 +105,15 @@
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-primary me-3" onclick="saved()" type="submit" name="formBtn" value="save"><i class="bi bi-gear"></i> Save Settings</button>
-                            <button class="btn btn-warning position-absolute" onclick="trainingEngine()" type="submit" name="formBtn" value="train">
-                                <div class="spinner-border spinner-border-sm text-danger d-none" role="status" id='spinner'>
-                                </div><i class="bi bi-arrow-repeat"id="iconTrain"></i>
+                            <button class="btn btn-primary me-3" onclick="saved()" type="submit" name="formBtn"
+                                    value="save"><i class="bi bi-gear"></i> Save Settings
+                            </button>
+                            <button class="btn btn-warning position-absolute" onclick="trainingEngine()" type="submit"
+                                    name="formBtn" value="train">
+                                <div class="spinner-border spinner-border-sm text-danger d-none" role="status"
+                                     id='spinner'>
+                                </div>
+                                <i class="bi bi-arrow-repeat" id="iconTrain"></i>
                                 Train Engine
                             </button>
                         </div>
@@ -161,7 +166,8 @@
         spinner.classList.remove("d-none");
 
     }
-    function  saved() {
+
+    function saved() {
         const element = document.getElementById("alertSaved");
         element.classList.remove("d-none");
     }
