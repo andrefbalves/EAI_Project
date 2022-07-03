@@ -2,6 +2,7 @@ import express from 'express';
 import {getActiveClasses, getClassesConfig, getEngineConfig, saveTestConfig} from '../database/engine.mjs';
 import {setTestingSet, getTestingSet} from "../database/testingset.mjs";
 import {testEngine} from "../preprocessing/stats.mjs";
+import {cleanResults} from "../database/results.mjs";
 export const testRouter = express.Router();
 
 /* GET training set. */
@@ -23,6 +24,7 @@ testRouter.post('/', async function (req, res, next) {
     if (req.body.formBtn === 'save') {
         await saveTestConfig(req.body.limit, req.body.field, req.body.order);
         await setTestingSet(activeClasses, req.body.limit, req.body.field, req.body.order, configs);
+        await cleanResults();
     }else if (req.body.formBtn === 'test') {
         await testEngine();
     }

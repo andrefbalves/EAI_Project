@@ -48,166 +48,372 @@
                 <form method="post">
                     <div class="row mt-2">
                         <div class="col">
-                            <div class="form-check form-switch">
-                                <div class="mb-2">
-                                    <label for="textarea1"><b>Overview</b></label>
-                                </div>
-                                <textarea class="form-control" id="textarea1" rows="6"
-                                          placeholder="Text to Classify..."></textarea>
+                            <div class="input-group">
+                                <span class="input-group-text">
+                                    <div class="row ">
+                                        <div class="col align-self-center">
+                                            <div class="fw-bold mb-0">Overview</div>
+                                            <br>
+                                            <button type="submit" name="formBtn" class="btn btn-warning" value="classify">Run the Classifier</button>
+                                        </div>
+                                    </div>
+                                </span>
+                                <textarea class="form-control" name="doc" rows="5"
+                                          aria-label="Overview to classify"><%= doc %></textarea>
                             </div>
                         </div>
-                        <div class="col mt-4">
+                        <div class="col align-self-center">
                             <div class="row">
-                                <div class="input-group">
-                                    <button type="submit" class="btn btn-warning">Run the Classifier</button>
-                                </div>
-                            </div>
-                            <div class="row mt-3">
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="inputResult">Cosine Similarity</span>
-                                        <input type="text" class="form-control" id="inputResult"
-                                               name="nameSomething" placeholder="Result to be displayed..." readonly>
+                                <% if(docCosine !== undefined) { %>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputResult">Cosine Similarity</span>
+                                            <input type="text" class="form-control bg-white" name="cosine" value="<%= docCosine %>"
+                                                   disabled>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col">
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="inputResult">Naive Bayes</span>
-                                        <input type="text" class="form-control" id="inputResult"
-                                               name="nameSomething" placeholder="Result to be displayed..." readonly>
+                                <% } %>
+                                <% if(docBayes !== undefined) { %>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="inputResult">Naive Bayes</span>
+                                            <input type="text" class="form-control bg-white" name="bayes" value="<%= docBayes %>"
+                                                   disabled>
+                                        </div>
                                     </div>
-                                </div>
+                                <% } %>
                             </div>
-                            <div class="row">
-                                <div class="input-group">
-                                    <label class="input-group-text">Real Class</label>
-                                    <select class="form-select" name="realClass" required>
-                                        <% for(var c = 0; c < classes.length; c++) { %>
-                                            <option value="<%= classes[c].genre %>"
-                                            <% if(classes[c].genre === 'teste') { %> selected
+                            <div class="row mt-5">
+                                <% if(docCosine !== undefined && docBayes !== undefined) { %>
+                                    <div class="col">
+                                        <div class="input-group">
+                                            <label class="input-group-text">Real Class</label>
+                                            <select class="form-select" name="realClass" required>
+                                                <% for(var c = 0; c < classes.length; c++) { %>
+                                                    <% if(classes[c].active === 1) { %>
+                                                        <option value="<%= classes[c].genre %>"
+                                                        <% if(classes[c].genre === realClass) { %> selected
+                                                                <% } %>
+                                                        ><%= classes[c].genre %>
+                                                        </option>
                                                     <% } %>
-                                            ><%= classes[c].genre %>
-                                            </option>
-                                        <% } %>
-                                    </select>
-                                </div>
+                                                <% } %>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="col d-flex">
+                                        <button type="submit" name="formBtn" class="btn btn-primary flex-fill" value="save">Save value to Test Engine</button>
+                                    </div>
+                                <% } %>
                             </div>
                         </div>
                     </div>
                 </form>
             </div>
-            <div class="container border-top">
-                <div class="d-flex p-2 align-items-start mt-4">
-                    <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist"
-                         aria-orientation="vertical">
-                        <button class="nav-link active" id="v-pills-cosine-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-cosine" type="button" role="tab" aria-controls="v-pills-cosine"
-                                aria-selected="true">Cosine Similarity
-                        </button>
-                        <button class="nav-link" id="v-pills-bayes-tab" data-bs-toggle="pill"
-                                data-bs-target="#v-pills-bayes" type="button" role="tab" aria-controls="v-pills-bayes"
-                                aria-selected="false">Naive Bayes
-                        </button>
+            <nav>
+                <div class="nav nav-tabs justify-content-center mt-4" id="nav-tab" role="tablist">
+                    <button class="nav-link active" id="nav-matrix-tab" data-bs-toggle="tab"
+                            data-bs-target="#nav-matrix" type="button" role="tab" aria-controls="nav-matrix"
+                            aria-selected="true">Confusion Matrix Compare
+                    </button>
+                    <button class="nav-link" id="nav-stats-tab" data-bs-toggle="tab" data-bs-target="#nav-stats"
+                            type="button" role="tab" aria-controls="nav-stats" aria-selected="false">Statistics Compare
+                    </button>
+                    <button class="nav-link" id="nav-contact-tab" data-bs-toggle="tab" data-bs-target="#nav-cosine"
+                            type="button" role="tab" aria-controls="nav-cosine" aria-selected="false">Cosine Similarity
+                        Classifier
+                    </button>
+                    <button class="nav-link" id="nav-disabled-tab" data-bs-toggle="tab" data-bs-target="#nav-bayes"
+                            type="button" role="tab" aria-controls="nav-bayes" aria-selected="false" bayes>Naive Bayes
+                        Classifier
+                    </button>
+                </div>
+            </nav>
+            <div class="tab-content bg-white border-start border-end border-bottom" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-matrix" role="tabpanel" aria-labelledby="nav-matrix-tab"
+                     tabindex="0">
+                    <div class="row">
+                        <div class="col mt-3 ms-4">
+                            <h4>Cosine Similarity</h4>
+                            <div class="table-responsive" id="cosineMatrix">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td class="border-0" rowspan="2"></td>
+                                        <% for(var i = 0; i < cosineStats.confusionMatrix.genres.length; i++) { %>
+                                            <th class="table-light border-0 text-center" scope="row">
+                                                <%= cosineStats.confusionMatrix.genres[i] %>
+                                            </th>
+                                        <% } %>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% for(var j = 0; j < cosineStats.confusionMatrix.matrix.length; j++) { %>
+                                        <tr>
+                                            <th class="table-light border-0 text-end" scope="row">
+                                                <%= cosineStats.confusionMatrix.genres[j] %>
+                                            </th>
+                                            <% for(var k = 0; k < cosineStats.confusionMatrix.matrix[j].length; k++) { %>
+                                                <td class="text-center border-0 <%= j === k ? "table-success" : "" %>"><%= cosineStats.confusionMatrix.matrix[j][k] %></td>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col mt-3 me-4">
+                            <h4>Naive Bayes</h4>
+                            <div class="table-responsive" id="bayesMatrix">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td class="border-0" rowspan="2"></td>
+                                        <% for(var i = 0; i < bayesStats.confusionMatrix.genres.length; i++) { %>
+                                            <th class="table-light text-center border-0"><%= bayesStats.confusionMatrix.genres[i] %></th>
+                                        <% } %>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% for(var j = 0; j < bayesStats.confusionMatrix.matrix.length; j++) { %>
+                                        <tr class="text-center">
+                                            <th class="table-light border-0 text-end" scope="row">
+                                                <%= bayesStats.confusionMatrix.genres[j] %>
+                                            </th>
+                                            <% for(var k = 0; k < bayesStats.confusionMatrix.matrix[j].length; k++) { %>
+                                                <td class="text-center border-0 <%= j === k ? "" : "table-danger" %>"><%= bayesStats.confusionMatrix.matrix[j][k] %></td>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="tab-content row" id="v-pills-tabContent">
-                            <div class="tab-pane fade show active" id="v-pills-cosine" role="tabpanel"
-                                 aria-labelledby="v-pills-cosine-tab">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="table-responsive" id="cosineMatrix">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                <tr>
-                                                    <td rowspan="2"></td>
-                                                    <% for(var i = 0; i < cosineStats.confusionMatrix.genres.length; i++) { %>
-                                                        <th class="text-center"><%= cosineStats.confusionMatrix.genres[i] %></th>
-                                                    <% } %>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <% for(var j = 0; j < cosineStats.confusionMatrix.matrix.length; j++) { %>
-                                                    <tr>
-                                                        <th scope="row"><%= cosineStats.confusionMatrix.genres[j] %></th>
-                                                        <% for(var k = 0; k < cosineStats.confusionMatrix.matrix[j].length; k++) { %>
-                                                            <td class="text-center"><%= cosineStats.confusionMatrix.matrix[j][k] %></td>
-                                                        <% } %>
-                                                    </tr>
-                                                <% } %>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="inputResult">Precision</span>
-                                            <input type="text" class="form-control" id="inputPrecision"
-                                                   name="nameSomething" placeholder="Result to be displayed..."
-                                                   readonly>
-                                        </div>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="inputResult">Recall</span>
-                                            <input type="text" class="form-control" id="inputPrecision"
-                                                   name="nameSomething" placeholder="Result to be displayed..."
-                                                   readonly>
-                                        </div>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="inputResult">FScore</span>
-                                            <input type="text" class="form-control" id="inputPrecision"
-                                                   name="nameSomething" placeholder="Result to be displayed..."
-                                                   readonly>
-                                        </div>
+                </div>
+                <div class="tab-pane fade" id="nav-stats" role="tabpanel" aria-labelledby="nav-stats-tab"
+                     tabindex="0">
+                    <div class="row">
+                        <div class="col mt-3 ms-4">
+                            <h4>Cosine Similarity</h4>
+                            <div class="row mt-3">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">Precision</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= cosineStats.precision %>"
+                                               disabled>
                                     </div>
                                 </div>
+                                <div class="col-3"></div>
                             </div>
-                            <div class="tab-pane fade" id="v-pills-bayes" role="tabpanel"
-                                 aria-labelledby="v-pills-bayes-tab">
-                                <div class="row">
-                                    <div class="col">
-                                        <div class="table-responsive" id="bayesMatrix">
-                                            <table class="table table-hover">
-                                                <thead>
-                                                <tr>
-                                                    <td rowspan="2"></td>
-                                                    <% for(var i = 0; i < bayesStats.confusionMatrix.genres.length; i++) { %>
-                                                        <th class="text-center"><%= bayesStats.confusionMatrix.genres[i] %></th>
-                                                    <% } %>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <% for(var j = 0; j < bayesStats.confusionMatrix.matrix.length; j++) { %>
-                                                    <tr>
-                                                        <th scope="row"><%= bayesStats.confusionMatrix.genres[j] %></th>
-                                                        <% for(var k = 0; k < bayesStats.confusionMatrix.matrix[j].length; k++) { %>
-                                                            <td class="text-center"><%= bayesStats.confusionMatrix.matrix[j][k] %></td>
-                                                        <% } %>
-                                                    </tr>
-                                                <% } %>
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                    <div class="col">
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="inputResult">Precision</span>
-                                            <input type="text" class="form-control" id="inputPrecision"
-                                                   name="nameSomething" placeholder="Result to be displayed..."
-                                                   readonly>
-                                        </div>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="inputResult">Recall</span>
-                                            <input type="text" class="form-control" id="inputPrecision"
-                                                   name="nameSomething" placeholder="Result to be displayed..."
-                                                   readonly>
-                                        </div>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="inputResult">FScore</span>
-                                            <input type="text" class="form-control" id="inputPrecision"
-                                                   name="nameSomething" placeholder="Result to be displayed..."
-                                                   readonly>
-                                        </div>
+                            <div class="row mt-2">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">Recall</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= cosineStats.recall %>"
+                                               disabled>
                                     </div>
                                 </div>
+                                <div class="col-3"></div>
                             </div>
+                            <div class="row mt-2 mb-3">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">F1Score</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= cosineStats.fscore %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                        </div>
+                        <div class="col mt-3 ms-4">
+                            <h4>Naive Bayes</h4>
+                            <div class="row mt-3">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">Precision</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= bayesStats.precision %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">Recall</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= bayesStats.recall %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                            <div class="row mt-2 mb-3">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">F1Score</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= bayesStats.fscore %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-cosine" role="tabpanel" aria-labelledby="nav-cosine-tab"
+                     tabindex="0">
+                    <div class="row">
+                        <div class="col mt-3 ms-4">
+                            <h4>Cosine Similarity</h4>
+                            <div class="table-responsive mt-2 align-self-center" id="cosineMatrix">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td class="border-0" rowspan="2"></td>
+                                        <% for(var i = 0; i < cosineStats.confusionMatrix.genres.length; i++) { %>
+                                            <th class="table-light border-0 text-center" scope="row">
+                                                <%= cosineStats.confusionMatrix.genres[i] %>
+                                            </th>
+                                        <% } %>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% for(var j = 0; j < cosineStats.confusionMatrix.matrix.length; j++) { %>
+                                        <tr>
+                                            <th class="table-light border-0 text-end" scope="row">
+                                                <%= cosineStats.confusionMatrix.genres[j] %>
+                                            </th>
+                                            <% for(var k = 0; k < cosineStats.confusionMatrix.matrix[j].length; k++) { %>
+                                                <td class="text-center border-0 <%= j === k ? "table-success" : "" %>"><%= cosineStats.confusionMatrix.matrix[j][k] %></td>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <div class="col mt-3 ms-4 align-self-center">
+                            <div class="row mt-3">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">Precision</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= cosineStats.precision %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">Recall</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= cosineStats.recall %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                            <div class="row mt-2 mb-2">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">F1Score</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= cosineStats.fscore %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="nav-bayes" role="tabpanel" aria-labelledby="nav-bayes-tab"
+                     tabindex="0">
+                    <div class="row">
+                        <div class="col mt-3 ms-4 align-self-center">
+                            <div class="row mt-3">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">Precision</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= bayesStats.precision %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                            <div class="row mt-2">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">Recall</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= bayesStats.recall %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                            <div class="row mt-2 mb-3">
+                                <div class="col-3"></div>
+                                <div class="col-6">
+                                    <div class="input-group input-group-sm">
+                                        <span class="input-group-text col-4" id="inputResult">F1Score</span>
+                                        <input type="text" class="form-control bg-light text-center" id="inputPrecision"
+                                               name="nameSomething" value="<%= bayesStats.fscore %>"
+                                               disabled>
+                                    </div>
+                                </div>
+                                <div class="col-3"></div>
+                            </div>
+                        </div>
+                        <div class="col mt-3 me-4">
+                            <h4>Naive Bayes</h4>
+                            <div class="table-responsive" id="bayesMatrix">
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td class="border-0" rowspan="2"></td>
+                                        <% for(var i = 0; i < bayesStats.confusionMatrix.genres.length; i++) { %>
+                                            <th class="table-light text-center border-0"><%= bayesStats.confusionMatrix.genres[i] %></th>
+                                        <% } %>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <% for(var j = 0; j < bayesStats.confusionMatrix.matrix.length; j++) { %>
+                                        <tr class="text-center">
+                                            <th class="table-light border-0 text-end" scope="row">
+                                                <%= bayesStats.confusionMatrix.genres[j] %>
+                                            </th>
+                                            <% for(var k = 0; k < bayesStats.confusionMatrix.matrix[j].length; k++) { %>
+                                                <td class="text-center border-0 <%= j === k ? "" : "table-danger" %>"><%= bayesStats.confusionMatrix.matrix[j][k] %></td>
+                                            <% } %>
+                                        </tr>
+                                    <% } %>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
