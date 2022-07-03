@@ -11,8 +11,11 @@ export const classifierRouter = express.Router();
 classifierRouter.get('/', async function (req, res, next) {
     let classes = await getClassesConfig();
     let cosineStats = await getStats('cosine');
+    let cosineError = new Error(cosineStats);
+    cosineError = cosineError instanceof Error;
     let bayesStats = await getStats('bayes');
-    let realClass = req.body.realClass;
+    let bayesError = new Error(bayesStats);
+    bayesError = bayesError instanceof Error;
 
     res.render('classifier-engine', {
         title: 'Classifier Engine',
@@ -20,9 +23,9 @@ classifierRouter.get('/', async function (req, res, next) {
         doc: '',
         docCosine: undefined,
         docBayes: undefined,
-        realClass: realClass,
-        cosineStats: cosineStats,
-        bayesStats: bayesStats
+        realClass: undefined,
+        cosineStats: !cosineError ? cosineStats : undefined,//todo here
+        bayesStats: !bayesError ? bayesStats : undefined
     });
 });
 

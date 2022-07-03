@@ -13,7 +13,7 @@ async function getConfusionMatrix(classifier) {
     let realClasses = results.map(a => a.real_class);
     let predictedClasses = results.map(a => (classifier === 'cosine' ? a.cosine_class : a.bayes_class));
 
-    return ConfusionMatrix.fromLabels(realClasses, predictedClasses);
+    return realClasses.length !== 0 || predictedClasses.length !== 0 ? ConfusionMatrix.fromLabels(realClasses, predictedClasses) : -1;
 }
 
 /**
@@ -30,7 +30,7 @@ function transposeMatrix(confusionMatrix) {
 
 /**
  * @param {string} classifier cosine or bayes
- * @returns {Promise<{fScore: number, confusionMatrix: {genres, matrix: *[]}, precision: number, recall: number}>}
+ * @returns {Promise<number>}
  */
 export async function getStats(classifier) {
     let truePositives = 0;
@@ -39,26 +39,31 @@ export async function getStats(classifier) {
 
     let confusionMatrix = await getConfusionMatrix(classifier);
 
-    if(confusionMatrix.labels.length === 2) {
-        truePositives = confusionMatrix.matrix[0][0];
-        falsePositives = confusionMatrix.matrix[1][0];
-        falseNegatives = confusionMatrix.matrix[0][1];
-    }
-    else {
-        for (let i = 0; i < confusionMatrix.labels.length; i++) {
-            truePositives += confusionMatrix.getTruePositiveCount(confusionMatrix.labels[i]);
-            falsePositives += confusionMatrix.getFalsePositiveCount(confusionMatrix.labels[i]);
-            falseNegatives += confusionMatrix.getFalseNegativeCount(confusionMatrix.labels[i]);
+    try {
+        if(confusionMatrix.labels.length === 2) {
+            truePositives = confusionMatrix.matrix[0][0];
+            falsePositives = confusionMatrix.matrix[1][0];
+            falseNegatives = confusionMatrix.matrix[0][1];
         }
+        else {
+            for (let i = 0; i < confusionMatrix.labels.length; i++) {
+                truePositives += confusionMatrix.getTruePositiveCount(confusionMatrix.labels[i]);
+                falsePositives += confusionMatrix.getFalsePositiveCount(confusionMatrix.labels[i]);
+                falseNegatives += confusionMatrix.getFalseNegativeCount(confusionMatrix.labels[i]);
+            }
+        }
+
+        let precision = truePositives / (truePositives + falsePositives);
+        let recall = truePositives / (truePositives + falseNegatives);
+        let fScore = 2 * (precision * recall) / (precision + recall);
+
+        confusionMatrix = transposeMatrix(confusionMatrix);
+
+        return {confusionMatrix, precision, recall, fScore};
     }
-
-    let precision = truePositives / (truePositives + falsePositives);
-    let recall = truePositives / (truePositives + falseNegatives);
-    let fScore = 2 * (precision * recall) / (precision + recall);
-
-    confusionMatrix = transposeMatrix(confusionMatrix);
-
-    return {confusionMatrix, precision, recall, fScore};
+    catch (e) {
+        return e;
+    }
 }
 
 /**
