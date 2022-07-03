@@ -8,7 +8,7 @@ import {saveResults} from "../database/results.mjs";
 
 export const classifierRouter = express.Router();
 
-classifierRouter.get('/', async function (req, res, next) {
+classifierRouter.get('/', async function (req, res, next) {//todo bloquear botão de correr classificador com base a existência de termos (train)
     let classes = await getClassesConfig();
     let cosineStats = await getStats('cosine');
     let cosineError = new Error(cosineStats);
@@ -24,7 +24,7 @@ classifierRouter.get('/', async function (req, res, next) {
         docCosine: undefined,
         docBayes: undefined,
         realClass: undefined,
-        cosineStats: !cosineError ? cosineStats : undefined,//todo here
+        cosineStats: !cosineError ? cosineStats : undefined,
         bayesStats: !bayesError ? bayesStats : undefined
     });
 });
@@ -46,7 +46,11 @@ classifierRouter.post('/', async function (req, res, next) {
     }
 
     let cosineStats = await getStats('cosine');
+    let cosineError = new Error(cosineStats);
+    cosineError = cosineError instanceof Error;
     let bayesStats = await getStats('bayes');
+    let bayesError = new Error(bayesStats);
+    bayesError = bayesError instanceof Error;
 
     res.render('classifier-engine', {
         title: 'Classifier Engine',
@@ -55,8 +59,7 @@ classifierRouter.post('/', async function (req, res, next) {
         docCosine: req.body.formBtn === 'save' ? undefined : docCosine.genre,
         docBayes: req.body.formBtn === 'save' ? undefined : docBayes.genre,
         realClass: req.body.realClass,
-        cosineStats: cosineStats,
-        bayesStats: bayesStats
+        cosineStats: !cosineError ? cosineStats : undefined,
+        bayesStats: !bayesError ? bayesStats : undefined
     });
 });
-//todo testar

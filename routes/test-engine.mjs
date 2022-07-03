@@ -12,7 +12,7 @@ testRouter.get('/', async function (req, res, next) {
     let configs = await getEngineConfig();
     let docs = await getTestingSet('', configs);
 
-    res.render('test-engine', { title: 'Test Engine', docs: docs, classes: classes, configs: configs});
+    res.render('test-engine', { title: 'Testing Engine', docs: docs, classes: classes, configs: configs, btnTest: false});
 });
 
 testRouter.post('/', async function (req, res, next) {
@@ -31,5 +31,5 @@ testRouter.post('/', async function (req, res, next) {
 
     docs = await getTestingSet(configs);
 
-    res.render('test-engine', { title: 'Test Engine', docs: docs, classes: classes, configs: configs});
+    res.render('test-engine', { title: 'Testing Engine', docs: docs, classes: classes, configs: configs, btnTest: true});
 });

@@ -11,7 +11,7 @@ trainRouter.get('/', async function (req, res, next) {
     let configs = await getEngineConfig();
     let docs = await getTrainingSet('', configs);
 
-    res.render('training-engine', {title: 'Training Engine', docs: docs, classes: classes, configs: configs});
+    res.render('training-engine', {title: 'Training Engine', docs: docs, classes: classes, configs: configs, btnTrain: false});
 });
 
 trainRouter.post('/', async function (req, res, next) {
@@ -33,5 +33,5 @@ trainRouter.post('/', async function (req, res, next) {
 
     classes = await getClassesConfig();
 
-    res.render('training-engine', {title: 'Training Engine', docs: docs, classes: classes, configs: configs});
+    res.render('training-engine', {title: 'Training Engine', docs: docs, classes: classes, configs: configs, btnTrain: true});
 });

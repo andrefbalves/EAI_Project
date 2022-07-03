@@ -109,7 +109,7 @@
                                     value="save"><i class="bi bi-gear"></i> Save Settings
                             </button>
                             <button class="btn btn-warning position-absolute" onclick="trainingEngine()" type="submit"
-                                    name="formBtn" value="train">
+                                    name="formBtn" value="train" <% if(btnTrain === false) { %> disabled <% } %>>
                                 <div class="spinner-border spinner-border-sm text-danger d-none" role="status"
                                      id='spinner'>
                                 </div>

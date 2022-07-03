@@ -108,7 +108,7 @@
                                     value="save"><i class="bi bi-gear"></i> Save Settings
                             </button>
                             <button class="btn btn-warning position-absolute" onclick="testingEngine()" type="submit"
-                                    name="formBtn" value="test">
+                                    name="formBtn" value="test"  <% if(btnTest === false) { %> disabled <% } %>>
                                 <div class="spinner-border spinner-border-sm text-danger d-none" role="status"
                                      id='spinner'>
                                 </div>
