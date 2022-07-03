@@ -26,7 +26,7 @@ configurationRouter.get('/', async function (req, res, next) {
 
 configurationRouter.post('/', async function (req, res, next) {
 
-    await saveSelectionConfig(req.body.limitRecords, req.body.metric, req.body.operation, req.body.typeOfGram);
+    await saveSelectionConfig(req.body.limitRecords, req.body.metric, req.body.operation, req.body.typeOfGram, req.body.testNormalizer);
     let configs = await getEngineConfig();
     let classes = await getClassesConfig();
     let bestTerms = await selectKBest('All', configs);

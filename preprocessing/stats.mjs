@@ -2,6 +2,7 @@ import {getResults, saveResults} from "../database/results.mjs";
 import ConfusionMatrix from "ml-confusion-matrix";
 import {getTestingSet} from "../database/testingset.mjs";
 import {classifyCosineSimilarity, classifyNaiveBayes} from "./classifier.mjs";
+import {removeSpecificChars} from "./clean.mjs";
 
 /**
  * @param {string} classifier cosine or bayes
@@ -62,7 +63,7 @@ export async function getStats(classifier) {
         return {confusionMatrix, precision, recall, fScore};
     }
     catch (e) {
-        return e;
+        return -1;
     }
 }
 
@@ -76,7 +77,7 @@ export async function testEngine() {
     for (let i = 0; i < docs.length; i++) {
         let obj = {doc: '', cosineClass: '', bayesClass: '', realClass: ''};
 
-        obj.doc = docs[i].overview;
+        obj.doc = removeSpecificChars(docs[i].overview);
         obj.realClass = docs[i].genre;
         obj.cosineClass = await classifyCosineSimilarity(docs[i].overview);
         obj.bayesClass = await classifyNaiveBayes(docs[i].overview);

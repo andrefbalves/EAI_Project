@@ -18,7 +18,7 @@ function removeSpaces(docText) {
  * @param {string} docText
  * @returns {string}
  */
-function removeSpecificChars(docText) {
+export function removeSpecificChars(docText) {
     return docText.replace(/[^\w\s]|_|\d/g, '');
 }
 
