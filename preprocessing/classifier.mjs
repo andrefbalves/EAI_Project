@@ -107,6 +107,22 @@ function termsProbability(arrayOfTerms, denominator, configs) {
 }
 
 /**
+ * @returns {number}
+ */
+async function getRandomClassification() {
+    let activeClasses = await getActiveClasses();
+    let genres = [];
+
+    for (let i = 0; i < activeClasses.length; i++) {
+        genres.push(activeClasses[i].genre);
+    }
+
+    let randomClass = genres[Math.floor(Math.random() * genres.length)];
+
+    return randomClass;
+}
+
+/**
  * @param {string} overview
  * @returns {Promise<{genre: string, classSimilarity: number}>}
  */
@@ -142,6 +158,9 @@ export async function classifyCosineSimilarity(overview) {
         if (maxSimilarity.classSimilarity < similarityClasses[i].classSimilarity)
             maxSimilarity = similarityClasses[i];
     }
+
+    if (maxSimilarity.genre === '')
+        maxSimilarity.genre = await getRandomClassification();
 
     return maxSimilarity;
 }
@@ -200,6 +219,9 @@ export async function classifyNaiveBayes(overview) {
         if (maxBayes.classBayes < classesBayes[i].classBayes)
             maxBayes = classesBayes[i];
     }
+
+    if (maxBayes.genre === '')
+        maxBayes.genre = await getRandomClassification();
 
     return maxBayes;
 }

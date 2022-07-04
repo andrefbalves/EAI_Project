@@ -105,11 +105,11 @@
                             </div>
                         </div>
                         <div class="col-sm-3">
-                            <button class="btn btn-primary me-3" onclick="saved()" type="submit" name="formBtn"
+                            <button class="btn btn-primary me-3" type="submit" name="formBtn"
                                     value="save"><i class="bi bi-gear"></i> Save Settings
                             </button>
                             <button class="btn btn-warning position-absolute" onclick="trainingEngine()" type="submit"
-                                    name="formBtn" value="train" <% if(btnTrain === false) { %> disabled <% } %>>
+                                    name="formBtn" value="train" <% if(saved === false) { %> disabled <% } %>>
                                 <div class="spinner-border spinner-border-sm text-danger d-none" role="status"
                                      id='spinner'>
                                 </div>
@@ -118,8 +118,12 @@
                             </button>
                         </div>
                     </div>
-                    <div class="alert alert-success alert-dismissible fade show d-none" role="alert" id="alertSaved">
+                    <div class="mt-3 alert alert-success alert-dismissible fade show <% if(saved === false) { %> d-none <% } %>" role="alert" id="alertSaved">
                         <strong>Saved!</strong> The actual configuration as been saved.
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    <div class="mt-3 alert alert-success alert-dismissible fade show <% if(trained === false) { %> d-none <% } %>" role="alert" id="alertSaved">
+                        <strong>Trained!</strong> Your Model has been seccessfully trained. Check the selected <a href="configuration-engine" class="alert-link">characteristics</a> and <a href="test-engine" class="alert-link">test</a> your model.
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
                 </form>
@@ -164,12 +168,6 @@
         const spinner = document.getElementById("spinner");
         icon.classList.add("d-none");
         spinner.classList.remove("d-none");
-
-    }
-
-    function saved() {
-        const element = document.getElementById("alertSaved");
-        element.classList.remove("d-none");
     }
 </script>
 </body>

@@ -11,11 +11,13 @@ trainRouter.get('/', async function (req, res, next) {
     let configs = await getEngineConfig();
     let docs = await getTrainingSet('', configs);
 
-    res.render('training-engine', {title: 'Training Engine', docs: docs, classes: classes, configs: configs, btnTrain: false});
+    res.render('training-engine', {title: 'Training Engine', docs: docs, classes: classes, configs: configs, saved: false, trained: false});
 });
 
 trainRouter.post('/', async function (req, res, next) {
     let classes;
+    let saved = true;
+    let trained = false;
 
     if (req.body.formBtn === 'save') {
         classes = Array.isArray(req.body.classes) ? req.body.classes : req.body.classes.split(" ");
@@ -26,6 +28,8 @@ trainRouter.post('/', async function (req, res, next) {
     }
     else if (req.body.formBtn === 'train') {
         await process();
+        trained = true;
+        saved = false;
     }
 
     let configs = await getEngineConfig();
@@ -33,5 +37,5 @@ trainRouter.post('/', async function (req, res, next) {
 
     classes = await getClassesConfig();
 
-    res.render('training-engine', {title: 'Training Engine', docs: docs, classes: classes, configs: configs, btnTrain: true});
+    res.render('training-engine', {title: 'Training Engine', docs: docs, classes: classes, configs: configs, saved: saved, trained: trained});
 });

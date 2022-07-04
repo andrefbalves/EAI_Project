@@ -12,7 +12,7 @@ testRouter.get('/', async function (req, res, next) {
     let configs = await getEngineConfig();
     let docs = await getTestingSet('', configs);
 
-    res.render('test-engine', { title: 'Testing Engine', docs: docs, classes: classes, configs: configs, btnTest: false});
+    res.render('test-engine', { title: 'Testing Engine', docs: docs, classes: classes, configs: configs, saved: false, tested: false});
 });
 
 testRouter.post('/', async function (req, res, next) {
@@ -20,16 +20,22 @@ testRouter.post('/', async function (req, res, next) {
     let classes = await getClassesConfig();
     let activeClasses = await getActiveClasses();
     let docs = [];
+    let saved = true;
+    let tested = false;
 
     if (req.body.formBtn === 'save') {
         await saveTestConfig(req.body.limit, req.body.field, req.body.order);
+        configs = await getEngineConfig();
         await setTestingSet(activeClasses, req.body.limit, req.body.field, req.body.order, configs);
         await cleanResults();
     }else if (req.body.formBtn === 'test') {
         await testEngine();
+        tested = true;
+        saved = false;
     }
 
+    configs = await getEngineConfig();
     docs = await getTestingSet(configs);
 
-    res.render('test-engine', { title: 'Testing Engine', docs: docs, classes: classes, configs: configs, btnTest: true});
+    res.render('test-engine', { title: 'Testing Engine', docs: docs, classes: classes, configs: configs, saved: saved, tested: tested});
 });

@@ -67,7 +67,6 @@ export async function saveTrainConfig(limit, field, orderBy) {
  * @param {string} orderBy
  * @returns {Promise<boolean>}
  */
-
 export async function saveTestConfig(limit, field, orderBy) {
     let query = "UPDATE engine_config SET test_limit_of_records = " + limit + ", test_order_by_field = '" + field + "', test_order_by = '" + orderBy + "'";
     await db.execute(query);

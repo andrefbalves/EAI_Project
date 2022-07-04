@@ -9,15 +9,19 @@ import {saveResults} from "../database/results.mjs";
 export const classifierRouter = express.Router();
 
 classifierRouter.get('/', async function (req, res, next) {//todo bloquear botão de correr classificador com base a existência de termos (train)
+    let configs = await getEngineConfig();
     let classes = await getClassesConfig();
     let cosineStats = await getStats('cosine');
     let cosineError = cosineStats === -1;
     let bayesStats = await getStats('bayes');
     let bayesError = bayesStats === -1;
+    let terms = await selectKBest('', configs);
+    let readyToClassify = terms.length > 0;
 
     res.render('classifier-engine', {
         title: 'Classifier Engine',
         classes: classes,
+        readyToClassify: readyToClassify,
         doc: '',
         docCosine: undefined,
         docBayes: undefined,
@@ -52,6 +56,7 @@ classifierRouter.post('/', async function (req, res, next) {
 
     res.render('classifier-engine', {
         title: 'Classifier Engine',
+        readyToClassify: true,
         classes: classes,
         doc: req.body.doc,
         docCosine: req.body.formBtn === 'save' ? undefined : docCosine.genre,
