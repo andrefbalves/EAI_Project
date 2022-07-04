@@ -4,6 +4,8 @@ import {addUniqueTerms, buildVector, operateVector} from "../features/bagOfWords
 import {cleanTemplate, cleanTerms, saveTerms} from "../database/terms.mjs";
 import {getActiveClasses, getEngineConfig} from "../database/engine.mjs";
 import fs from "fs";
+import {cleanResults} from "../database/results.mjs";
+import {cleanTestingSet} from "../database/testingset.mjs";
 
 /**
  * @param {Array<{unigrams: [], bigrams: []}>} docs
@@ -58,6 +60,8 @@ function calculateTerms(docs, bagOfGrams, n) {
 async function save(trainingSet) {
 
     await cleanTerms();
+    await cleanResults();
+    await cleanTestingSet();
 
     for (let i = 0; i < trainingSet.length; i++) {
         await saveTerms(trainingSet[i]);

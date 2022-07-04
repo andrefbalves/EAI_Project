@@ -10,7 +10,7 @@ export async function getTestingSet(configs) {
 }
 
 
-async function cleanTestingSet() {
+export async function cleanTestingSet() {
     let query = "TRUNCATE TABLE test_set";
 
     await db.execute(query);
