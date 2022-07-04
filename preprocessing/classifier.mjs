@@ -181,7 +181,6 @@ export async function classifyNaiveBayes(overview) {
     arrayOfTerms = doc.unigrams.concat(doc.bigrams);
 
     for (let i = 0; i < classes.length; i++) {
-        //let classRecords = await getTrainingSet(classes[i].genre, configs);//todo é preciso????
 
         for (let j = 0; j < classes[i].bagOfWords.length; j++) {
             classes[i].bagOfWords[j] = laplaceCorrection(classes[i].bagOfWords[j]);

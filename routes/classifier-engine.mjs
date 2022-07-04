@@ -1,14 +1,13 @@
 import express from 'express';
 import {getStats} from "../preprocessing/stats.mjs";
-import {getClassesConfig, getEngineConfig, saveSelectionConfig} from "../database/engine.mjs";
+import {getClassesConfig, getEngineConfig} from "../database/engine.mjs";
 import {selectKBest} from "../database/terms.mjs";
-import {configurationRouter} from "./configuration-engine.mjs";
 import {classifyCosineSimilarity, classifyNaiveBayes} from "../preprocessing/classifier.mjs";
 import {saveResults} from "../database/results.mjs";
 
 export const classifierRouter = express.Router();
 
-classifierRouter.get('/', async function (req, res, next) {//todo bloquear botão de correr classificador com base a existência de termos (train)
+classifierRouter.get('/', async function (req, res, next) {
     let configs = await getEngineConfig();
     let classes = await getClassesConfig();
     let cosineStats = await getStats('cosine');
