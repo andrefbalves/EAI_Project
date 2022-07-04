@@ -22,8 +22,8 @@ export async function setTestingSet(classes, limit_of_records, order_by_field, o
 
     for (let i = 0; i < classes.length; i++) {
         let query = "INSERT INTO test_set (corpus_id) " +
-            "SELECT imdb_id FROM corpus " +
-            "WHERE genre = '" + classes[i].genre + "' " +
+            "SELECT imdb_id FROM corpus LEFT JOIN training_set ON corpus.imdb_id = training_set.corpus_id WHERE training_set.corpus_id IS NULL " +
+            "AND genre = '" + classes[i].genre + "' " +
             "ORDER BY " + order_by_field + " " + order_by +
             " LIMIT " + limit_of_records;
 
