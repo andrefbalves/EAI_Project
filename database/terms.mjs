@@ -1,5 +1,4 @@
 import {db} from "./config.mjs";
-import {getActiveClasses} from "./engine.mjs";
 
 /**
  * @returns {Promise<void>}
@@ -76,13 +75,12 @@ export async function cleanTemplate() {
  * @returns {Promise<*>}
  */
 export async function selectKBest(genre, configs) {
-    let activeCLasses = await getActiveClasses();
 
     let query = "SELECT * FROM terms WHERE operation = '" + configs.class_operation + "'";
     if (genre !== undefined && genre !== 'All' && genre !== '') query += " AND genre = '" + genre + "'";
     if (configs.class_type_of_gram !== undefined && configs.class_type_of_gram !== 'All' && configs.class_type_of_gram !== '') query += " AND typeOfGram = '" + configs.class_type_of_gram + "'";
     if (configs.class_order_by_metric !== undefined && configs.class_order_by_metric !== '') query += " ORDER BY " + configs.class_order_by_metric + " DESC";
-    if (configs.class_limit_of_records !== undefined && configs.class_limit_of_records !== '0') query += " LIMIT " + configs.class_limit_of_records * activeCLasses.length;
+    if (configs.class_limit_of_records !== undefined && configs.class_limit_of_records !== '0') query += " LIMIT " + configs.class_limit_of_records;
     let terms = await db.execute(query);
 
     return terms[0];

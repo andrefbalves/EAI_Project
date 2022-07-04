@@ -1,6 +1,6 @@
 import express from 'express';
 import {getStats} from "../preprocessing/stats.mjs";
-import {getClassesConfig, getEngineConfig} from "../database/engine.mjs";
+import {getActiveClasses, getClassesConfig, getEngineConfig} from "../database/engine.mjs";
 import {selectKBest} from "../database/terms.mjs";
 import {classifyCosineSimilarity, classifyNaiveBayes} from "../preprocessing/classifier.mjs";
 import {saveResults} from "../database/results.mjs";
@@ -14,7 +14,14 @@ classifierRouter.get('/', async function (req, res, next) {
     let cosineError = cosineStats === -1;
     let bayesStats = await getStats('bayes');
     let bayesError = bayesStats === -1;
-    let terms = await selectKBest('', configs);
+    let activeClasses = await getActiveClasses();
+    let terms = [];
+
+    for (let i = 0; i < activeClasses.length; i++) {
+        let resp = await selectKBest(activeClasses[i].genre, configs);
+        terms = terms.concat(resp);
+    }
+
     let readyToClassify = terms.length > 0;
 
     res.render('classifier-engine', {
