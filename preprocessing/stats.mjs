@@ -56,11 +56,11 @@ export async function getStats(classifier) {
 
         let precision = truePositives / (truePositives + falsePositives);
         let recall = truePositives / (truePositives + falseNegatives);
-        let fScore = 2 * (precision * recall) / (precision + recall);
+        let f1Score = 2 * (precision * recall) / (precision + recall);
 
         confusionMatrix = transposeMatrix(confusionMatrix);
 
-        return {confusionMatrix, precision, recall, fScore};
+        return {confusionMatrix, precision, recall, f1Score: f1Score};
     }
     catch (e) {
         return -1;

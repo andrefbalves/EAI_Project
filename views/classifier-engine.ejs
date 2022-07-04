@@ -56,7 +56,13 @@
                                                     value="classify"
                                             <% if(readyToClassify === false) { %>  disabled
                                                     <% } %>
-                                            >Run the Classifier</button>
+                                            ><div class="spinner-border spinner-border-sm text-danger d-none"
+                                                  role="status"
+                                                  id='spinner'>
+                                </div>
+                                <i class="bi bi-speedometer2" id="iconRun"></i>
+                                                Run the Classifier
+                                            </button>
                                         </div>
                                     </div>
                                 </span>
@@ -69,7 +75,8 @@
                                 <% if(docCosine !== undefined) { %>
                                     <div class="col">
                                         <div class="input-group">
-                                            <span class="input-group-text" id="inputResult">Cosine Similarity</span>
+                                            <span class="input-group-text col-6"
+                                                  id="inputResult">Cosine Similarity</span>
                                             <input type="text" class="form-control bg-white" name="cosine"
                                                    value="<%= docCosine %>"
                                                    disabled>
@@ -91,8 +98,9 @@
                                 <% if(docCosine !== undefined && docBayes !== undefined) { %>
                                     <div class="col">
                                         <div class="input-group">
-                                            <label class="input-group-text">Real Class</label>
+                                            <label class="input-group-text col-6">Real Class</label>
                                             <select class="form-select" name="realClass" required>
+                                                <option value="" selected disabled>Please select</option>
                                                 <% for(var c = 0; c < classes.length; c++) { %>
                                                     <% if(classes[c].active === 1) { %>
                                                         <option value="<%= classes[c].genre %>"
@@ -240,7 +248,7 @@
                                             <span class="input-group-text col-4" id="inputResult">F1Score</span>
                                             <input type="text" class="form-control bg-light text-center"
                                                    id="inputPrecision"
-                                                   name="nameSomething" value="<%= cosineStats.fscore %>"
+                                                   name="nameSomething" value="<%= cosineStats.f1Score %>"
                                                    disabled>
                                         </div>
                                     </div>
@@ -282,7 +290,7 @@
                                             <span class="input-group-text col-4" id="inputResult">F1Score</span>
                                             <input type="text" class="form-control bg-light text-center"
                                                    id="inputPrecision"
-                                                   name="nameSomething" value="<%= bayesStats.fscore %>"
+                                                   name="nameSomething" value="<%= bayesStats.f1Score %>"
                                                    disabled>
                                         </div>
                                     </div>
@@ -357,7 +365,7 @@
                                             <span class="input-group-text col-4" id="inputResult">F1Score</span>
                                             <input type="text" class="form-control bg-light text-center"
                                                    id="inputPrecision"
-                                                   name="nameSomething" value="<%= cosineStats.fscore %>"
+                                                   name="nameSomething" value="<%= cosineStats.f1Score %>"
                                                    disabled>
                                         </div>
                                     </div>
@@ -403,7 +411,7 @@
                                             <span class="input-group-text col-4" id="inputResult">F1Score</span>
                                             <input type="text" class="form-control bg-light text-center"
                                                    id="inputPrecision"
-                                                   name="nameSomething" value="<%= bayesStats.fscore %>"
+                                                   name="nameSomething" value="<%= bayesStats.f1Score %>"
                                                    disabled>
                                         </div>
                                     </div>
@@ -452,10 +460,12 @@
     </div>
 </main>
 <script>
-    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-    var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-        return new bootstrap.Tooltip(tooltipTriggerEl)
-    })
+    function runClassifier() {
+        const icon = document.getElementById("iconRun");
+        const spinner = document.getElementById("spinner");
+        icon.classList.add("d-none");
+        spinner.classList.remove("d-none");
+    }
 </script>
 </body>
 </html>

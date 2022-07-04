@@ -48,11 +48,9 @@ classifierRouter.post('/', async function (req, res, next) {
     }
 
     let cosineStats = await getStats('cosine');
-    let cosineError = new Error(cosineStats);
-    cosineError = cosineError instanceof Error;
+    let cosineError = cosineStats === -1;
     let bayesStats = await getStats('bayes');
-    let bayesError = new Error(bayesStats);
-    bayesError = bayesError instanceof Error;
+    let bayesError = bayesStats === -1;
 
     res.render('classifier-engine', {
         title: 'Classifier Engine',
