@@ -43,7 +43,6 @@ classifierRouter.post('/', async function (req, res, next) {
     let docBayes = await classifyNaiveBayes(req.body.doc);
 
     if (req.body.formBtn === 'save') {
-        //todo adicionar ao TEST set para servir de exemplo como teste?
         await saveResults([{
             doc: req.body.doc,
             cosineClass: {genre: docCosine.genre},
